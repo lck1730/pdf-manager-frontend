@@ -54,4 +54,12 @@ public interface PdfDocumentRepository extends JpaRepository<PdfDocument, String
      */
     @Query("SELECT p FROM PdfDocument p WHERE p.isExtracted = false OR p.isExtracted IS NULL")
     List<PdfDocument> findByIsExtractedFalse();
+    
+    /**
+     * 查找所有未总结的PDF文档
+     * 
+     * @return 未总结的PDF文档列表
+     */
+    @Query("SELECT p FROM PdfDocument p WHERE p.isSummarized = false OR p.isSummarized IS NULL")
+    List<PdfDocument> findByIsSummarizedFalse();
 }
