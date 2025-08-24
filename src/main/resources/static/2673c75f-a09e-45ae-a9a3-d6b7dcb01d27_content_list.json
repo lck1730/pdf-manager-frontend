@@ -1,0 +1,1318 @@
+[
+    {
+        "type": "text",
+        "text": "Dynamic simulation of a space lithium-cooled reactor system coupled with a He-Xe closed Brayton cycle",
+        "text_level": 1,
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Zongyun Wu, Tiancai Liu*, Lin Qi, Lin Sun, Hongwei Yang, Mingyu Wu",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "China Institute of Atomic Energy, Beijing, 102413, China",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "ARTICLEINFO",
+        "text_level": 1,
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Keywords: Closed Brayton cycle Lithium- cooled space reactor Transient thermal- hydraulic analysis Reactor system analysis",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "ABSTRACT",
+        "text_level": 1,
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "The lithium- cooled reactor with Brayton conversion power system mainly consists of fast reactor, intermediate heat exchanger, closed Brayton cycle (CBC) loops filled with Helium- Xenon (He- Xe) binary gas mixtures and heat rejection loop which radiate residual heat through heat pipes to outer space. In this study, a dynamic model of 100- kWe lithium- cooled reactor with Brayton conversion power system was established based on RESYS code, which include reactor core thermal- hydraulic model, six- group neutron kinetics model and decay heat model, heat exchanger model, Closed Brayton cycle model including turbine, compressor and rotating shaft, heat pipe radiator model etc. The nominal steady- state simulation is carried out to verify the correctness and accuracy of individual component model the integrated system model. Four typical transient conditions including accidental reactivity insertion, loss of coolant flow of primary loop, partial and total external load loss and a step reduction in the mass flow rate of heat rejection loop are simulated to analysis the transient characteristics and prove the safety features for those simulated scenarios. The results are helpful for the design, evaluation and operation of space liquid- lithium- cooled reactor power system with He- Xe closed Brayton cycle.",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. Introduction",
+        "text_level": 1,
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "There are three possible energy sources available for space applications, including chemistry, solar energy, and nuclear energy. Chemical power sources are not compact enough to provide high power for a long time, and solar energy has the disadvantage of relatively low power levels and relies on distance and orientation from the sun. While, nuclear reactor system judiciously applied in space activity has the advantages of high- power level, compact size and long- term operation over chemical and solar energy sources (Arautijo and Guimaraes, 2018). The space nuclear reactor power system can be applied as energy source for the future military and civilian activities in space such as electric propulsion, deep space exploration mission, lunar or Martian surface power station.",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Since the beginning of the space age, nuclear energy has been used for aerospace purposes as the result of the Cold War. Several space nuclear reactors have been designed by the former Soviet Union and TOPAZ- I is launched into space. However, the only space nuclear reactor ever launched by the USA was the SNAP 10- A (Johnson et al., 1967). But over the years, the United States has carried out a large number of projects related to the development of space nuclear systems including nuclear thermal propulsion program NERVA/Rover project, SPAR/SP- 100 project, SP- 100 project (Smith, 1989), Prometheus project (Ashcroft and Eshelman, 2007), and Fission Surface Power (FSP) project (Palac et al., 2011). The energy conversion methods used in space reactors can be roughly divided into two categories: static conversion and dynamic conversion. As the representative of space reactor with static conversion system, the thermionic space reactor TOPAZ- II (Voss, 1994) is design by the former Soviet Union, which use in- core single cell thermionic fuel cell as energy conversion unit. Space reactor systems proposed by USA almost adopt thermoelectric convertor or dynamic conversions. The Prometheus project proposed a He- Xe mixture cooled space reactor system coupled with Brayton cycle (Randall, 2005). While, in the FSP project, a NaK- cooled,  $\\mathrm{UO_2}$  fueled reactor coupled to free- piston Stirling converters concept was select (Schmitz and Mason, 1991). The lithium- cooled space reactor (LCSR), SP- 100, was proposed to be coupled with thermoelectric convertor, closed Brayton cycle (CBC) and Stirling conversion systems (Dochat and Dhar, 2008). A design of coupling SP- 100 reactor with He- Xe CBC system for lunar surface power system applications is proposed by NASA Lewis Research Center (Mason et al., 1992), which is shown in Fig. 1.",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Along with the progress of space reactor power system design and experiment, the numerical simulations have also performed. The",
+        "page_idx": 0
+    },
+    {
+        "type": "table",
+        "img_path": "images/6577603968ee131a699b2cf1c5014f107d789c6cfb756a5882b1d4fddf341be9.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td colspan=\"2\">Nomenclature</td></tr><tr><td>A</td><td>area (m²)</td></tr><tr><td>c</td><td>specific heat (J/kg/K)</td></tr><tr><td>C</td><td>delayed neutron precursor concentration (m⁻³)</td></tr><tr><td>CP</td><td>specific heat capacity at constant pressure (J/kg/K)</td></tr><tr><td>d</td><td>thickness (m)</td></tr><tr><td>D</td><td>diameter (m)</td></tr><tr><td>E</td><td>fission product energy fraction</td></tr><tr><td>t</td><td>time (s)</td></tr><tr><td>T</td><td>temperature (K)</td></tr><tr><td>H</td><td>heat transfer coefficient (W/m²/K)</td></tr><tr><td>He</td><td>Heilman</td></tr><tr><td>h</td><td>enthalpy (J/kg)</td></tr><tr><td>k</td><td>Boltzmann constant (eV.K), heat conductivity (W/m/K)</td></tr><tr><td>P</td><td>pressure (Pa), Reactor power</td></tr><tr><td>Q</td><td>volumetric heat source (W.m⁻³)</td></tr><tr><td>R</td><td>Thermal resistance (K/W)</td></tr><tr><td>S</td><td>surface area (m²)</td></tr><tr><td>u</td><td>velocity (m/s)</td></tr><tr><td>V</td><td>volume (m³)</td></tr><tr><td>W</td><td>Work (J/s)</td></tr></table>",
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Thermionic Transient Analysis Model (TITAM) was developed by ElGenk Group to study the system response and load following characteristics of TOPAZ- II reactor (E- Osnak et al., 1994). RELAP5 have been modified by Simiao Tang to model for TOPAZ- II, the steady state condition and three severe transient accidents are simulated and analyzed (Tang et al., 2019). A system analysis code TASTIN specialized for thermionic space reactors was developed by Wenwen Zhang which can provide detailed transient thermal- hydraulic characteristics of the reactor core and the heat rejection radiator (Zhang et al., 2016). A dynamic model was constructed with MATLAB and Simulink by Qian Ma to perform steady state and start- up process simulation of space thermionic nuclear reactor with heat pipe radiator (Ma et al., 2022). 3- dimensional numerical model of TOPAZ- II reactor core is established by Zhiwen Dai (et al., 2020) with computational fluid dynamics software STAR- CCM+, and the numerical result is compared with the experimental data and design values. And thermionic conversion model is established with TASTIN to analyze the thermoelectric characteristics of thermionic space reactor TOPAZ- II by Zhiwen Dai (Zhiwen et al., 2020). Enping Zhu developed a transient coupling code for the space thermionic reactor TOPAZ- II based on the conjugate heat transfer solver of OpenFOAM (Zhu et al., 2023a). A novel 3D computational method for solving fluid- solid coupling heat transfer based on a mixed solution framework that combine traditional numerical method on CPU and deep learning operators on muti- core GPU is applied to an improved TOPAZ- II system by EnpingZhu (Zhu et al., 2023b). Compared with the thermionic space reactor, there are less numerical simulations published in the available literatures about LCSR and He- Xe closed Brayton cycle. Wenwen Zhang established a transient model of an LCSR system coupled with",
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/6edc571cff24ce93771bac18b24967a4f9ddb6a9c870b76af9361b7b6b442b6b.jpg",
+        "image_caption": [
+            "Fig. 1. 100-kWe lunar surface power system design layout (Mason et al., 1992)."
+        ],
+        "image_footnote": [],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "thermoelectric conversion and potassium heat pipe heat radiator (Zhang et al., 2020). A dynamic model of LCSR with thermoelectric generators was established in MATLAB/Simulink to study the application of the model predictive controller and the fault- tolerant control strategy (Upadhyaya et al., 2007). Sandia National Laboratory (SNL) developed a transient simulation code RPCSIM (Wright et al., 2006) using MATLAB/Simulink to simulate the transient behavior of gas cooled space reactors and liquid metal cooled reactor systems with Bryton cycles. Chenglong Wang (Wang et al., 2021) developed a dynamic simulation code (SAC- SPACE) for the space gas- cooled reactor with CBC to study the dynamic characteristics of the system under various condition. The transient response of space gas- cooled reactor with CBC under the condition of mechanical failure of one Brayton loop and reactivity insertion accident are simulated and analyzed by Ran Zhang (Thermal- hydraulic analysis of gas, 2020).",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "For a LCSR with He- Xe Brayton cycle for lunar surface power system or other application, the Brayton loop plays an important role in the dynamic characteristics evolution of the entire system, as any transient or accident in the main loop or heat rejection loop will propagate to the Brayton loop, and vice versa. The LCSR system, closed Brayton cycle system and heat removal system is tightly coupled. Therefore, understanding the dynamic characteristics of integral systems is of great significance. However, the analysis of He- Xe Brayton systems mainly focuses on gas cooled space reactors, the research literatures about dynamic modeling of LCSR with Brayton cycle is limited. In order to develop a dynamic simulation code to study the system transient response of LCSR with He- Xe Braton cycle, the reactor system code RESYS (Wu et al., 2023) is revised to establish the dynamic model of LCSR with He- Xe Brayton cycle cooled by heat pipe radiator and study the dynamic characteristics of this system. The steady state operation state and four typical accidental conditions including accidental reactivity insertion, loss of coolant flow of primary loop, loss of the external load and a step reduction in the mass flow rate in heat rejection loop are simulated.",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "2. System description and model development",
+        "text_level": 1,
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "The schematic diagram of a LCSR with He- Xe CBC and heat pipe radiator cooled heat rejection loop is presented in Fig. 2. The fission heat generated at the reactor is carried away by the lithium coolant flowing through the core. Liquid lithium flows into heat exchanger to heat the He- Xe mixture in the secondary CBC loop. The high- temperature and high- pressure He- Xe gas from the heat exchanger passes through the turbine, where the thermal energy of the gas mixture is converted into mechanical energy of the turbomachinery. The turbomachinery units, the Turbine(T), Compressor(C), and Alternator (A) installed on single shaft and rotate at the same angular speed. In Fig. 2, the accumulator in the primary loop and heat rejection loop is used to accommodate the volume variation in the loop due to expansion and contraction of the coolant and stabilize system pressure, which is treated as pressure boundary in the dynamic model for LCSR. After the He- Xe gas passes through the turbine, the pressure is reduced to  $1.5\\mathrm{MPa}$  and the temperature is reduced to 908K. Then, He- Xe gas flows into the hot end of the regenerator and exchanges heat with the cold end of the regenerator. The temperature of He- Xe gas flowing out of the regenerator is approximately 568K. Then, the gas mixture flows into the gas cooler, where waste heat is transferred to the heat discharge circuit through the walls of the gas cooler. The temperature of He- Xe gas flowing out of the gas cooler is approximately 362K. After flowing out of the compressor, the pressure of He- Xe gas increases to 3.0Mpa. NaK alloy takes the waste heat from the cold end of the gas cooler and discharges it into the external space through the heat pipe radiator (see Fig. 2).",
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/3a6ba4233837b94d13443fb9ea737a3cde1f56f5ac444d740cc2f4524f06db0e.jpg",
+        "image_caption": [
+            "Fig. 3. The schematic T-s diagram of the simple recuperated closed Brayton cycle."
+        ],
+        "image_footnote": [],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "The He- Xe CBC loop presented in Fig. 1 is a typical simple regenerative Brayton cycle which adopts recuperator to improve the cycle efficiency. The corresponding T- s diagram corresponding to the above CBC loop is shown in Fig. 3.",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "2.1. Physical property of He-Xe mixture and liquid-lithium",
+        "text_level": 1,
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "In the CBC system using He- Xe mixture as working fluids, the gas temperature varies from 300K to 1400K, and the system pressure varies from 0.1 to 20 MPa. At the pressure between this range, the property evaluation method for dilute gases based on Chapman- Enskog approach",
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/c03a7c0fffa0996d40432eef8e97870a005c0e2cab6e7d93bfa955c82ea613e3.jpg",
+        "image_caption": [
+            "Fig. 2. A schematic diagram of a lithium-cooled space reactor system coupled to He-Xe closed Brayton cycle."
+        ],
+        "image_footnote": [],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "is not applicable for He- Xe mixture (Tournier et al., 2006). To accurately predicting the thermodynamic and transport properties of He- Xe mixture, Tournier and El- Genk developed semi- empirical correlations (Mason et al., 1996) for noble gases and binary mixtures based on Chapman- Enskog approach after taking high gas density effect into consideration. The empirical correlations for thermodynamic and transport properties of He- Xe mixture including density, dynamic viscosity, thermal conductivity, specific enthalpy, and specific heat are programed into RESYS code to obtain the properties of He- Xe mixture of arbitrary mixing ratio. The correlations for thermal property of He- Xe mixture used in RESYS code are listed in Appendix A.",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Liquid lithium is used as potential coolant candidate in primary loop of high- temperature nuclear space power system for its merit of lower density and high boiling temperature at low vapor pressure. Harry W. Davison of NASA Lewis Research Center developed an empirical correlation of the thermophysical properties of liquid lithium based on experimental data obtained from published technical literature (Davison, 1968). These correlations of liquid- lithium thermal physical property established by Harry W. Davison are summarized in Table 1.",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "2.2. Reactor model",
+        "text_level": 1,
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "2.2.1. Reactor kinetics model",
+        "text_level": 1,
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The heat source of a nuclear reactor mainly consists of two parts: fission power and decay power. Due to the small size of the lithium cooled reactor core, the assumption that the distribution of reactor power does not change with time is made. The change in reactor fission power is calculated by solving the point kinetics equations with six- group of precursors. The reactor decay power is considered via the decay heat equation with four- group fission product.",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The point kinetics equations are given as:",
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\frac{dP_f}{dt} = \\frac{1}{\\Lambda}\\left(\\rho -\\sum_{i = 1}^{6}\\beta_i\\right)P_f + \\sum_{i = 1}^{6}\\lambda_iC_i \\tag{1}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\frac{dC_i}{dt} = \\frac{\\beta_i}{\\Lambda} P_f - \\lambda_iC_i,i = 1,2,3,\\ldots ,6 \\tag{2}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Where  $P_{f}$  denotes the reactor fission power,  $\\lambda_{i}$  denotes the delayed neutron decay constant,  $\\beta_{i}$  denotes the fraction of delayed neutron,  $C_i$  is the concentration of delayed neutron precursor. For the stiffness of point kinetics equations, the Gear algorithm with Adams prediction correction method is used to solve this initial value problem. The neutronic parameters used for the reactor kinetics equations are listed in Table 2.",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The decay heat equation is given as:",
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\frac{dh_{decay,j}(t)}{dt} = E_jP_f(t) - \\lambda_jh_{decay,j}(t),j = 1,2,3,4 \\tag{3}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Where  $E_{j}$  denotes the fission product energy fraction for group j,  $\\lambda_{j}h_{decay,j}$  is fission product decay power. Due to the fact that the decay heat equation is a non- stiff initial value problem, the explicit Runge- Kutta method is sufficient to efficiently solve the decay heat equation.",
+        "page_idx": 3
+    },
+    {
+        "type": "table",
+        "img_path": "images/4b3d660d07b6f4c213b96ffcaf8acb390328767eb4f97732e8234b2674ec7825.jpg",
+        "table_caption": [
+            "Table 1 Thermal physical properties of liquid-lithium."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Thermal property</td><td>Correlations (Temperature T is given in unit of Kelvin)</td></tr><tr><td>Heat Capacity (J/kg/K)</td><td>cP= 4169.0</td></tr><tr><td>Surface Tension (N/m)</td><td>σ= 0.447 - 1.07 × 10-4T - 1.351 × 10-8T2</td></tr><tr><td>Thermal Conductivity (W/(m.K))</td><td>k= 21.847 + 0.05</td></tr><tr><td>Viscosity (N.s/m2)</td><td>μ= exp(-3.080 + 57.63/T - 5.172 × 10-4T)</td></tr><tr><td>Enthalpy (J/kg)</td><td>h= 4169T - 7.519 × 105</td></tr><tr><td>Density (kg/m3)</td><td>ρ= 562 - 0.100T</td></tr><tr><td>Vapor pressure (N/m2)</td><td>P= exp(10.015 - 8064.5/T)</td></tr><tr><td>Melting point (K)</td><td>453.7K</td></tr><tr><td>Boiling point at 1 atm</td><td>1608.0K</td></tr></table>",
+        "page_idx": 3
+    },
+    {
+        "type": "table",
+        "img_path": "images/a43e01444cb377b675840c96b01c0a1e474dec8dcb215d024793e45a0b967db3.jpg",
+        "table_caption": [
+            "Table 2 Neutronic parameters for the reactor kinetics equation."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Variable</td><td>group 1</td><td>group 2</td><td>group 3</td><td>group 4</td><td>group 5</td><td>group 6</td></tr><tr><td>Precursor decay constant(1/s)</td><td>0.0126</td><td>0.0318</td><td>0.116</td><td>0.312</td><td>1.42</td><td>3.73</td></tr><tr><td>Delayed neutron fraction</td><td>2.53E-4</td><td>1.46E-3</td><td>1.343E-3</td><td>2.940E-3</td><td>1.022E-3</td><td>2.35E-4</td></tr><tr><td>Precursor mean lifetime(s)</td><td>78.75</td><td>31.52</td><td>8.694</td><td>3.212</td><td>0.713</td><td>0.262</td></tr></table>",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The total reactor power is given by the summation of fission power and decay power:",
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nP_{total} = P_{f}(t) + \\sum_{i = 1}^{4}\\lambda_{i}h_{decay,i}(t) \\tag{4}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The neutron kinetics reactivity feedback model for liquid lithium cooled reactors considers three mechanisms of reactivity feedback, namely, Doppler feedback reactivity  $\\rho_{F}$ , reactor core expansion feedback reactivity  $\\rho_{E}$  and coolant expansion feedback reactivity  $\\rho_{Li}$ .",
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l}\\rho_{F}(t) = \\alpha_{D}ln\\left(\\frac{T_{F}(t)}{T_{F}(0)}\\right)\\\\ \\rho_{Li}(t) = \\alpha_{F}(T_{F}(t) - T_{F}(0)) + \\alpha_{C}(T_{C}(t) - T_{C}(0)) + \\alpha_{R}(T_{R}(t) - T_{R}(0))\\\\ \\rho_{Li}(t) = \\alpha_{Li}(T_{Li}(t) - T_{Li}(0)) \\end{array} \\tag{7}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Where  $T_{F}$  denotes temperature of coolant,  $T_{C}$  denotes temperature of cladding, and  $T_{R}$  denotes temperature of reflectors.  $\\alpha_{D}$  denotes the doppler feedback reactivity coefficient of fuel,  $\\alpha_{F},\\alpha_{C}$ , and  $\\alpha_{R}$  are the fuel, cladding, and axial reflector expansion feedback reactivity coefficient respectively.  $\\alpha_{Li}$  denotes the temperature reactivity feedback coefficient of coolant. The reactivity feedback coefficient of lithium- cooled reactor considered in this paper is shown in Table 3.",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "2.2.2. Reactor thermal-hydraulic model",
+        "text_level": 1,
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "The cross- section views of lithium- cooled reactor is show in Fig. 4. The LCSR is mainly composed of fuel fin, reflector, control rods, and control drum. The fuel pin inside the central hexagonal assembly has a lower fissile enrichment of  $89\\%$ . While, the fuel pins out of the central assembly have higher fissile enrichment of  $97\\%$ . The heterogeneous distribution of fuel enrichment serves to flatten the core power distribution. Fig. 5 present the schematic diagram of wire warped fuel pin and control volume division of fuel element. The fuel rod can be roughly divided into three parts: the lower reflector, the UN fuel, and the fission gas chamber. The lower reflector not only reduces the critical mass of the reactor, but also plays an additional role in shielding. The Rhenium (Re) linear acts as chemical barrier between the UN fuel and Nb- 1 Zr cladding. As shown in Fig. 4, the thermal hydraulic model of the reactor core is established by dividing the fuel rods along the axial and radial directions, and discretizing the heat conduction equation on the grid. The two- dimensional transient heat conduction is used to solve the",
+        "page_idx": 3
+    },
+    {
+        "type": "table",
+        "img_path": "images/63dbd19d2e63a2100aa512f3608cda6bb1bc45c691c25766e0e19c20be01695e.jpg",
+        "table_caption": [
+            "Table 3 Reactivity feedback coefficient of the lithium-cooled reactor."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Parameter</td><td>Value</td></tr><tr><td>Fuel doppler reactivity coefficient αD</td><td>2.3E-7</td></tr><tr><td>Fuel expansion reactivity coefficient αP</td><td>-1.21E-5/K</td></tr><tr><td>Cladding expansion reactivity coefficient αC</td><td>1.22E-7/K</td></tr><tr><td>Reflector expansion reactivity coefficient αR</td><td>-4.4E-7/K</td></tr><tr><td>Coolant reactivity coefficient αLi</td><td>-3.26E-6/K</td></tr></table>",
+        "page_idx": 3
+    },
+    {
+        "type": "image",
+        "img_path": "images/d66b6eb51deafc53bd87ec3bc67cbcee62a0dd24332a20661210a08462a8a491.jpg",
+        "image_caption": [
+            "Fig. 4. Cross-section views of lithium-cooled reactor."
+        ],
+        "image_footnote": [],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/f88ae6126bcee75573995f6378825f9b4b08cac3a6152ce546a149a6f8b3aa71.jpg",
+        "image_caption": [
+            "Fig. 5. The schematic diagram of wire warped fuel pin and control volume division of fuel element."
+        ],
+        "image_footnote": [],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "temperature distribution in the solid region of fuel rod: Fuel:",
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\rho_{F}(T_{F})C_{F}(T_{F})\\frac{\\partial T_{F}}{\\partial t} = \\frac{1}{r}\\frac{\\partial}{\\partial r}\\left(k_{F}(T_{F})r\\frac{\\partial T_{F}}{\\partial r}\\right) + \\frac{\\partial}{\\partial z}\\left(k_{F}(T_{F})\\frac{\\partial T_{F}}{\\partial z}\\right) + q(t) \\tag{8}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Where,  $\\rho_{F}$  denotes the density of the UN fuel,  $C_{F}$  denotes the heat capacity of the UN fuel,  $k_{F}$  denotes the cladding heat conductivity,  $T_{F}$  denotes the fuel temperature,  $q(t)$  is the volumetric fission heat source.",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Re linear and Nb- Zr cladding:",
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\rho_{C}(T_{C})C_{C}(T_{C})\\frac{\\partial T_{C}}{\\partial t} = \\frac{1}{r}\\frac{\\partial}{\\partial r}\\left(k_{C}(T_{C})r\\frac{\\partial T_{C}}{\\partial r}\\right) + \\frac{\\partial}{\\partial z}\\left(k_{C}(T_{C})\\frac{\\partial T_{C}}{\\partial z}\\right) \\tag{9}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Where,  $\\rho_{C}$  denotes the density of cladding,  $C_{c}$  denotes the cladding heat capacity;  $k_{C}$  denotes the cladding heat conductivity;  $T_{c}$  denotes the cladding temperature.",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The boundary condition between the fuel outer surface and inner surface of Re linear is written as:",
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nh_{gap}(T_{F,out} - T_{C,in}) + \\epsilon_{fb}\\sigma \\Big(T_{F,out}^4 -T_C^4\\Big) = k_c\\frac{\\partial T_F}{\\partial r} |_{out} = k_C\\frac{\\partial T_C}{\\partial z} |_{in} \\tag{10}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Where  $h_{gap}$  denote gaseous heat transfer coefficient and the second item on the left side denotes the heat transfer by radiation.",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The third kind boundary condition is applied for the cladding outer surface, which is written as:",
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nk_{C}\\frac{\\partial T_{C}}{\\partial z} |_{out} = h_{w}\\big(T_{C}|_{out} - T_{f}\\big) \\tag{9}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Where,  $h_w$  denotes the convective heat transfer coefficient and  $T_{f}$  denotes temperature of the coolant.",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "2.3. Heat exchanger and recuperator model",
+        "text_level": 1,
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "The model of intermediate heat exchanger (IHX), gas cooler (GC) and recuperator are similar. The model of IHX consists of hot channels, cold channels, and intermediate heat transfer plates. The thermal- hydraulic model of heat exchanger discretizes these components into small control volumes along the axial direction. The intermediate plate is discretized into one or more segment alone radial direction. The convective heat transfer of hot channel and cold channel is modeled by area averaged mass, momentum, and energy equation. The heat conduction in intermediate plate is modeled by tow dimensional Fourier heat conduction equation.",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Energy conservation equation of cold channel and hot channel:",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\frac{d(\\rho_fA_xh_f)}{dt} +\\frac{\\partial}{\\partial x} (\\rho_fu_fh_f)_xA_x = \\frac{\\partial}{\\partial x}\\left(k_fA_x\\frac{\\partial}{\\partial x} T_f\\right) + S_wh_w(T_w - T_f) \\tag{12}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n-k_{w}\\frac{dT_{w}}{dt} = h_{w}(T_{w} - T_{f}) \\tag{13}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Where  $\\rho_{f}$  denotes coolant density,  $h_f$  denotes coolant specific enthalpy,  $u_{f}$  denotes velocity of coolant flow,  $f_{f}$  denotes coolant heat conductivity.  $A_{x}$  is the cross- section area of flow channel.  $T_{w}$  is wall temperature of intermediate plate.  $S_{w}$  denotes the flow channel perimeter and  $h_w$  denotes convective heat transfer coefficient.",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "The energy equation for intermediate plate:",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\frac{\\partial(\\rho_wC_{p,w}T_w)}{\\partial t} = \\frac{\\partial}{\\partial x}\\left(k_w\\frac{\\partial T_w}{\\partial x}\\right) + \\frac{\\partial}{\\partial r}\\left(k_w\\frac{\\partial T_w}{\\partial r}\\right) \\tag{14}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Where  $k_{w}$  denotes heat conductivity of heat transfer plate and  $C_{p,w}$  denotes heat capacity.",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "2.4. Turbomachinery model",
+        "text_level": 1,
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "In the CBC system of space reactor, the turbine is connected to compressor and generator with the shaft. The compressor and turbine have the same shaft rotating speed. The equation of shaft rotating speed follows the conservation of angular momentum:",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\sum_{i}I_{i}\\frac{d\\omega}{dt} = \\sum_{i}\\tau_{i} - \\sum_{i}f_{i}\\omega +\\tau_{c} \\tag{15}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Where,  $\\omega$  denotes for angular speed of shaft,  $I_{i}$  is rotational inertia of turbomachinery. The first item on the right side of above equation is the torques produced by turbine and consumed by alternator and compressor. The second term denotes the damping torques due to friction. The third term denotes the torques consumed by control system.",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "The torque produced by turbine and consumed by compressor is expressed as:",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\tau_{turbine} = \\frac{P_{turbine}}{\\omega} = \\frac{W_{turbine}}{\\omega} C_{p,g}\\left(T_{in,turb} - T_{out,turb}\\right) \\tag{16}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\tau_{comp} = \\frac{P_{comp}}{\\omega} = \\frac{W_{comp}}{\\omega} C_{p,g}\\left(T_{in,comp} - T_{out,comp}\\right) \\tag{17}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Where  $P_{turbine}$  denotes the power generated by the turbine,  $P_{comp}$  denotes the power consumed by the compressor,  $T_{in,turb}$  and  $T_{out,turb}$  are turbine inlet temperature and outlet temperature respectively,  $T_{in,comp}$  and  $T_{out,comp}$  are compressor inlet temperature and outlet temperature respectively. The ratio of  $T_{out}$  to  $T_{in}$ , namely, temperature ratio, is given by performance map according to dimensionless flow  $\\dot{m}_{r}$  and dimensionless rotation speed  $\\omega_{r}$ .",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "The compressor's head add to the momentum equation and pressure drop of turbine can be expressed as  $\\Delta P$",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\Delta P = P_2^T -P_1^T = P_1^T\\big(R_p - 1\\big) \\tag{18}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Where  $R_{p} = R_{p}(\\omega_{r},\\dot{m}_{r})$  is pressure ratio of compressor or turbine, and is given by performance map of turbomachinery.",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "The turbine and compressor performance map is obtained through mean line flow analysis method, which is shown in Figs. 7 and 8 respectively. In Fig. 7, the upper half of the figure shows the pressure ratio of turbine as function of dimensionless flow rate for constant shaft rpm, the curve on the bottom shows the temperature ratio for constant rpm.  $N_{r}$  denotes relative rotation speed.",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "2.5. Radiator model",
+        "text_level": 1,
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "The gas cooler cools the He- Xe mixture before flowing into the compressor and transports the heat from the Brayton cycle to the heat discharge circuit. The heat- rejection circuit uses NaK alloy as the working fluid. The heat transmitted to the heat- rejection circuit is ultimately discharged into the external environment by the water heat pipe radiator. The structural diagram of a heat pipe unit in the radiator is shown in Fig. 9. The evaporation section of the heat pipe is used to absorb heat from the NaK alloy, while the condensation section of the heat pipe transfers heat to the fin through heat conduction. The heat is ultimately radiated to the external environment by the Carbon- Carbon (C- C) fin. The coolant temperature flowing into the heat pipe radiator is 463K, and the NaK alloy temperature flowing out of the radiator is 345K. The thermal property of NaK alloy is given in Table .4.",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Due to the high efficiency of heat transfer in heat pipes, researchers have conducted extensive experimental and numerical simulation studies on heat pipes recently (Zhang et al., 2023; Tian et al., 2023; Wang et al., 2022). In the thermal- hydraulic model of heat pipe radiator, the performance of water heat pipe is predicted by thermal resistance network model (Ribeiro and Romano, 2019) for the advantages of high computational efficiency. As shown in Fig. 6, according to the heat transfer mechanism of heat pipe, the thermal resistance of heat transfer process consists of the evaporator wall heat conduction resistance R1, evaporator wick heat conduction resistance R2, evaporation resistance R3, steam flow resistance R4, condensation resistance R5, condenser wick heat transfer process R6, and condenser wall heat conduction resistance R7. The wall and wick axial heat conduction resistance of adiabatic section (R8, R9) is neglected. The temperature difference between the heat pipe evaporator wall and heat pipe condensation region wall is given as:",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nQ = \\frac{1.0}{R1 + R2 + R3 + R4 + R5 + R6 + R7}\\left(T_{hp,e} - T_{hp,c}\\right) \\tag{15}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "The boundary condition at outer surface of the evaporator wall is given as:",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nh_{f}S_{e,surf}\\big(T_{f} - T_{hp,e}\\big) = \\frac{1}{R_{1}}\\big(T_{hp,e} - T_{cap,ext,e}\\big) \\tag{20}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Where,  $T_{f}$  denotes temperature of NaK coolant, and  $h_{f}$  denotes convective heat transfer coefficient. As shown in Fig. 9,  $T_{hp,e}$  denotes evaporator wall temperature and  $T_{cap,ext,e}$  denotes evaporator's wick temperature.",
+        "page_idx": 5
+    },
+    {
+        "type": "table",
+        "img_path": "images/44ce0ef1f2dc4b09af87c0abe043f94e53ac6382b2d9b023fc56c1d8d0cac1c6.jpg",
+        "table_caption": [
+            "Table 4 Thermal physical properties of NaK alloy."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Thermal property</td><td>Correlations (Temperature T is given in unit of Kelvin)</td></tr><tr><td>Heat capacity (J/kg/K)</td><td>cp=1097.04-0.556T+3.431×10-4T2</td></tr><tr><td>Surface tension (N/m)</td><td>σ=1.357-7.192×10-5(T-273)</td></tr><tr><td>Thermal conductivity (W/(m.K))</td><td>k=0.0116ρ1/3exp(668ρ/T),T&amp;lt;773K</td></tr><tr><td>Viscosity (N.s/m2)</td><td>μ=exp(-5.080+57.63/T-5.172×10-4T)</td></tr><tr><td>Density (kg/m3)</td><td>ρ=946.65+0.245T</td></tr></table>",
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/8895b3d5ee9d15dc2c47c0f947e2c006824e6b55068986e153f80fad89428f31.jpg",
+        "image_caption": [
+            "Fig. 6. The schematic diagram of control volume division of heat exchanger and recuperator."
+        ],
+        "image_footnote": [],
+        "page_idx": 6
+    },
+    {
+        "type": "image",
+        "img_path": "images/408cb9f1a6383b4cd4f2678c6a44b7b5a89cde8cb00a494bc0ac9016c790dfdb.jpg",
+        "image_caption": [
+            "Fig. 7. The performance map for the turbine."
+        ],
+        "image_footnote": [],
+        "page_idx": 6
+    },
+    {
+        "type": "image",
+        "img_path": "images/56cf605af0bd5da3fde7ffcb724b2672a1161a8b8a5b0c99ea516bac5748afc7.jpg",
+        "image_caption": [
+            "Fig. 8. The performance map for the compressor."
+        ],
+        "image_footnote": [],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Due to the relatively thin thickness of the C- C fin, two- dimensional heat conduction equation can be used to describe the heat transfer on the C- C fin:",
+        "page_idx": 6
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\rho_{i}c_{i}V_{i}\\frac{dT_{i}(t)}{dt} = \\frac{\\partial}{\\partial x}\\left(\\lambda_{i}\\frac{\\partial T_{i}}{\\partial x}\\right) + \\frac{\\partial}{\\partial y}\\left(\\lambda_{i}\\frac{\\partial T_{i}}{\\partial y}\\right) - f_{i}\\epsilon_{i}\\sigma \\left(T_{i}^{4} - T_{0}^{4}\\right) \\tag{21}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Where,  $T_{i}$  denotes temperature of C- C fin.  $T_{0}$  denotes the ambient temperature.  $\\lambda_{i}$  denotes the C- C fin heat conductivity.  $f_{i}$  denotes geometric view factors.  $\\epsilon_{i}$  denotes the surface radiation emissivity.  $\\sigma$  denotes the Stefan- Boltzmann constant. The subscribe  $i$  denotes the control volume index.",
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "The boundary equation between C- C fin and heat pipe condenser",
+        "page_idx": 6
+    },
+    {
+        "type": "image",
+        "img_path": "images/8b1f550065ed0741b82d3e2df9695a45272c5d957c8b674a1476b1b3aa263d1e.jpg",
+        "image_caption": [
+            "Fig. 9. Schematic diagram of the heat pipe thermal resistance model."
+        ],
+        "image_footnote": [],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "section is expressed as:",
+        "page_idx": 7
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\frac{1}{R_7}\\big(T_{cap,ext,c} - T_{hp,c}\\big) = \\frac{S_{in}}{\\delta x_{in}} k_i\\big(T_{hp,c} - T_{i,in}\\big) \\tag{22}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "2.6. Simulation method",
+        "text_level": 1,
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Fig. 10 shows the calculation flow chart of the LCSR system model established in RESYS. The transient simulation is split into calculations in multiple successive time steps. In simulation of each time step, the heat transfer calculation for reactor, IHX, recuperator, gas cooler, and radiator are performed first by solving the heat conduction equation, and heat flux across the heat pipe is updated with thermal resistance network model. Thermal hydraulic calculation for primary loop, CBC loop, and heat rejection loop is carried out by solving the mass, energy, and momentum conservation equations subsequently, and distribution of mass flow, specific enthalpy (temperature) and pressure are determined. These two steps are iterated solved to ensure the convergence of temperature field. After that, auxiliary models including reactor kinetics, reactivity feedback, and turbomachinery performance model are simulated to provide constitutive information such as reactor power,",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/1c6d2b4a0da8d815d244a4f062e061ad7ea4af045870f364844d38ff80f77ec6.jpg",
+        "image_caption": [
+            "Fig. 10. Calculation flow chart of the model for the LCSR system in RESYS code."
+        ],
+        "image_footnote": [],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "compressor's head, pressure drop of turbine to the primary heat transport system.",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "The data flow chart of the model established for LCSR system with He- Xe CBC loop is shown in Fig. 11. The heat transfer calculation in solid wall region (reactor core, IHX, Gas cooler, recuperator, and heat pipe) takes the temperature of fluid as boundary condition. The heat flux form solid wall to fluid is provided to the energy equation in the thermal hydraulic calculation step of primary loop, CBC loop, and heat rejection loop. The reactivity feedback is determined from the temperature distribution in reactor core solved by reactor thermal- hydraulic model. And reactor power given by reactor kinetics calculation is set as time variation coefficient of nuclear fission heat source. The thermal state variables of compressor and turbine such as temperature and pressure are utilized to determine the performance of turbomachinery. The shaft rotation speed is solved with turbomachinery model together with load, and the compressor's head, pressure drop of turbine, enthalpy increase of compressor and turbine are feed back to the CBC loop thermal hydraulic calculation in return.",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "3. Results and discussion",
+        "text_level": 1,
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "With the LCSR system model established in Section 2, the steady- state operating conditions and four typical accident conditions of the system are analyzed in this section.",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "3.1. Analysis of steady-state",
+        "text_level": 1,
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "The steady- state calculation of the LCSR coupled with He- Xe CBC system is to preliminarily verify the model established in the previous section and provide initial conditions for transient accident conditions. The system parameters under steady- state condition predicted by RESYS and corresponding design values are listed in Table 5. The design values are obtained from the steady state design code and the operation condition consults that of space reactor in Prometheus project (Wright et al., 2006). The deviation of system parameter predicted by RESYS compared with the design value is within  $2\\%$",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Fig. 12 presents the temperature profiles of fuel and coolant inside reactor core and coolant temperature distribution in IHX. The maximum temperature difference between fuel and coolant is about 76K. The maximum fuel temperature is about 1237K, and the fuel temperature peaks at the upper header of fuel rod. Due to the non- uniform axial distribution profile of power, the temperature difference between the fuel and coolant in the axial center is greater than the temperature difference at the two ends along the axial direction. In primary side of the IHX, the coolant temperature decreases from 1199K to 899K, while coolant temperature rises from 856K to 1156K in the secondary side of IHX. Fig. 13 shows the axial temperature distribution of the coolant temperature in the regenerator and gas cooler.",
+        "page_idx": 8
+    },
+    {
+        "type": "table",
+        "img_path": "images/ddb95b27a5ff80e78bc64cb810c11c8af46d7e5783756c4f2203524a8ee296b8.jpg",
+        "table_caption": [
+            "Table 5 Comparisons between design value and the RESYS steady-state simulation."
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>Parameter</td><td>Design value</td><td>RESYS</td><td>Relative error (±%)</td></tr><tr><td>Reactor inlet temperature</td><td>900K</td><td>899.47K</td><td>0.05%</td></tr><tr><td>Reactor outlet temperature</td><td>1200K</td><td>1199.47K</td><td>0.04%</td></tr><tr><td>IHX secondary side inlet temperature</td><td>854K</td><td>856.31K</td><td>0.27%</td></tr><tr><td>IHX secondary side outlet temperature</td><td>1153K</td><td>1156.61K</td><td>0.31%</td></tr><tr><td>Turbine inlet temperature</td><td>1144K</td><td>1147.54K</td><td>0.30%</td></tr><tr><td>Turbine outlet temperature</td><td>915K</td><td>912.3K</td><td>0.29%</td></tr><tr><td>Turbine inlet pressure</td><td>2.956Mpa</td><td>2.96Mpa</td><td>0.13%</td></tr><tr><td>Turbine outlet pressure</td><td>1.513Mpa</td><td>1.49Mpa</td><td>1.50%</td></tr><tr><td>Recuperator outlet temperature</td><td>568K</td><td>568.91K</td><td>0.16%</td></tr><tr><td>Compressor inlet temperature</td><td>502K</td><td>501.58K</td><td>0.01%</td></tr><tr><td>Compressor outlet temperature</td><td>507K</td><td>505.67K</td><td>0.26%</td></tr><tr><td>Compressor inlet pressure</td><td>1.50Mpa</td><td>1.49Mpa</td><td>0.66%</td></tr><tr><td>Compressor outlet pressure</td><td>3.0Mpa</td><td>3.01Mpa</td><td>0.30%</td></tr><tr><td>Radiator inlet temperature</td><td>463K</td><td>462.2K</td><td>0.17%</td></tr><tr><td>Radiator outlet temperature</td><td>345K</td><td>344.3K</td><td>0.20%</td></tr></table>",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Under the normal operation condition, power of  $302.4~\\mathrm{kW}$  is converted from thermal energy to mechanical energy by gas turbine, and mechanical energy of  $185.5\\mathrm{kW}$  is consumed by compressor to pressurize He- Xe mixture gas. The rest of mechanical energy is converted into electric power, corresponding to thermoelectric conversion efficiency of  $31.1\\%$",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "3.2. Analysis of transient accidents",
+        "text_level": 1,
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Based on the steady- state calculation results as the initial condition, this section analyzes four typical transient accident conditions, including accidental reactivity insertion, loss of coolant flow in primary loop, loss of the external load, and step reduction in the mass flow rate. The reason for choosing these accidents is that they are the most",
+        "page_idx": 8
+    },
+    {
+        "type": "image",
+        "img_path": "images/855fe9e6354d9e070d3b0716e458e63a9dcd05fca2deaa6ebf05ab182b2a27a5.jpg",
+        "image_caption": [
+            "Fig. 11. Data flow chart of the models developed for the LCSR system with He-Xe CBC loop."
+        ],
+        "image_footnote": [],
+        "page_idx": 8
+    },
+    {
+        "type": "image",
+        "img_path": "images/3d8a234c28f0824e4cf1b198b0933abf82bf77c56e605e44ddd09388b48a20d6.jpg",
+        "image_caption": [
+            "Fig. 12. Axial temperature distribution of the core component and coolant temperature in IHX."
+        ],
+        "image_footnote": [],
+        "page_idx": 9
+    },
+    {
+        "type": "image",
+        "img_path": "images/fdc9522e703c65ad5592bf95cb44b6c4c9a3661730958def7ea94e89bac90f68.jpg",
+        "image_caption": [
+            "Fig. 13. Axial temperature distribution of coolant in recuperator and gas cooler."
+        ],
+        "image_footnote": [],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "commonly occur during normal operation and may cause serious consequences.",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "3.2.1. Analysis of accidental reactivity insertion",
+        "text_level": 1,
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "In this case, it is assumed that during normal operation of the space reactor system, positive reactivity is suddenly introduced due to unexpected rotation of the control drum. At first, the reactor system is in rated full power steady- state operating conditions. During the accident, assuming that the external load power does not change, the shaft speed is not controlled by the control system and is determined by the angular momentum balance equation. The variation of the power of main equipment and shaft speed are shown in Fig. 14 (a). Fig. 15 (a) presents the variation of reactor core inlet temperature and outlet temperature. The shaft power plotted in Fig. 14 (a) denotes the difference between turbine generated power and compressor consumed power. Fig. 15 (b) presents the variation of turbine inlet and outlet temperature, recuperator outlet temperature. At  $0s$ , the unexpected rotation of the control drum introduced of  $0.01\\Phi$  of positive reactivity. The reactor fission power start to increase rapidly. At  $21s$ , the reactor fission power increased to  $476~\\mathrm{kW}$ , approximately 1.27 times the rated power of 375 kW. Due to the increase in coolant and fuel temperatures, the Doppler effect of the fuel and the expansion of the coolant introduce negative reactivity feedback. The increase in reactor power is suppressed by the introduced negative reactivity feedback effect. The reactor power rapidly decreased due to negative reactivity  $21s$  after the accident, and finally stabilized at  $394\\mathrm{kW}1000\\mathrm{s}$  later.",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "The downward trend of fuel and reactor outlet temperature is after  $200s$  is due to the decrease in reactor power from  $21s$ . The decrease in fuel and reactor outlet temperature introduced positive reactivity according to the negative feedback effect. However, as the reactor inlet temperature increases shown in Fig. 15(a), the average temperature of fuel decreases much slower than the maximum temperature as show in Fig. 14(b). Therefore, the positive reactivity introduced by decrease of average fuel and coolant temperature is not enough to result in a positive overall reactivity. In fact, as shown in Fig. 14 (b), the overall reactivity is still negative, and the decrease of fuel and coolant temperature in Fig. 15 (b) will slow down the speed of power decrease, but not enough to lead to an increase in power.",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "As the inlet temperature of the turbine increases, the output power of the turbine also increases as presented in Figs. 14 (a) and Fig. 15. Due to the coaxial arrangement of the turbomachinery, and the external load remains constant during transient accidents, an increase in turbine power will lead to an increase in shaft speed. The increase in shaft speed also increases the work consumed by the compressor. When the shaft speed increased to about 1.03 times of rated value after  $1000s$ , the alternator consumed torque, turbine generated torque, compressor consumed torque are balanced again.",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "In conclusion, this space reactor system shows good self- regulation ability in the accidental reactivity insertion transient due to the negative reactivity feedback and rebalance ability of turbomachinery. Good negative reactivity feedback performance can prevent excessive increase in reactor power. The high thermal conductivity of UN fuel and lithium coolant can not only prevent excessive temperature increase of the fuel, but also result in a short system response time due to the low temperature difference between fuel and coolant during the reactivity insertion transient. The coaxial turbomachinery arrangement scheme of the CBC system can achieve the system's power matching ability and self- balancing of the shaft torque.",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "3.2.2. Analysis of loss of coolant flow rate of primary loop",
+        "text_level": 1,
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "This transient calculation assumed that partial loss of flow accident (LOFA) of primary loop happens during normal steady- state operation. When the auxiliary power supply system malfunctions, the electrical power supplied to the electromagnetic pump may decrease, leading to a degradation in the electromagnetic pump performance. It is assumed that the lithium flow rate of primary loop decreases linearly form 0.295 kg/s to  $0.236kg / s$  in  $1s$  when the performance of the electromagnetic pump decreases. During this accidental transient, the external power is assumed to be invariant. Fig. 16 presents the variation of the power of main equipment, shaft speed, and flow rate of primary loop during the partial LOFA of primary loop. Fig. 17(a) presents the temperature variation of various components during this accident process. As shown in Fig. 17(a), as the flow rate of primary loop drops, the reactor outlet temperature increases and the inlet temperature of reactor drops. During this accident, the compressor inlet temperature drops very slowly. The loss of coolant flow rate of primary loop will increase the temperature of reactor core, negative reactivity feedback introduced to the reactor core due to the increased fuel temperature. Therefore, the reactor power drops to  $320\\mathrm{kW}$  in  $60s$  as shown in Fig. 16, which is about 0.86 times of the rated value. After  $60s$ , the reactor power increases and finally stabilized at  $363~\\mathrm{kW}$ , which is about  $0.97$  times of the rated power. The mechanical power generated by turbine and consumed by compressor and the shaft speed oscillates and drops to a new steady value. After  $1000s$ , the balance of reactor power, turbomachinery power, and external load power reached again as shown in Fig. 16.",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "The oscillation of turbomachinery power in Fig. 16 is explained as follows. As shown in Fig. 17(a), the reactor fuel temperature and reactor outlet temperature increase firstly and then decrease due to negative",
+        "page_idx": 9
+    },
+    {
+        "type": "image",
+        "img_path": "images/6551bf623cb2c05d7d1d176ae1316ef1249008090ead01bbec283c887aef2638.jpg",
+        "image_caption": [
+            "Fig. 14. The variation of power of main equipment, shaft speed, and reactivity during the RHA."
+        ],
+        "image_footnote": [],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "reactivity feedback. The turbine inlet temperature decreases due to the loss of coolant flow rate in IHX primary side, and then increase because of the increased reactor outlet temperature, which can be observed from Fig. 17 (b). The decrease and increase in turbine inlet temperature causes oscillation in turbine power and shaft speed. The oscillation in shaft speed will also affect the compressor power and outlet temperature, for which the compressor outlet temperature oscillates even through the compressor inlet temperature almost maintain unchanged.",
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "In conclusion, the reactor system can stabilize reactor power during partial LOFA of the primary loop due to negative reactivity feedback. The partial LOFA in primary loop will propagate to Brayton cycle via IHX by influencing the turbine inlet temperature. The turbomachinery system in Brayton cycle can achieve balance again after the oscillation of shaft speed.",
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "3.2.3. Analysis of the loss external load",
+        "text_level": 1,
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "This section simulates and analyzes the transient response process of the system under partial and full external load loss accident conditions. Due to the coaxial arrangement of the turbomachinery, if the external load is partially or completely lost, the mechanical work generated by the turbine cannot be fully consumed by the turbomachinery system, resulting in unbalanced torque of the shaft and ultimately increasing the shaft speed. Additionally, the mass of the turbomachinery in the He- Xe CBC system for space application is relatively small, resulting in a",
+        "page_idx": 10
+    },
+    {
+        "type": "image",
+        "img_path": "images/e0b437a44a3456e9af157ec7889104e6a5e7813fdf77b1cbcc6dc598fc39141f.jpg",
+        "image_caption": [
+            "Fig.15. t i    t aating conditions)."
+        ],
+        "image_footnote": [],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "relatively small moment of inertia. As a result, the unbalanced torque will lead to a fast speed change of shaft. In the event of a partial load loss accident, the system may still to reach a new stable state rely on its own stability when the shaft speed is not too high. However, when the load is completely lost, the accident may lead to over- peed of shaft and even surging of turbomachinery. Therefore, it is of vital importance to understand the dynamic response of the system under partial and full external load loss accident.",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Firstly, the partial loss of external load accident is simulated and analyzed. Under this accident, it is assumed that the external load loses",
+        "page_idx": 11
+    },
+    {
+        "type": "image",
+        "img_path": "images/b9329929d0d5da1f2a9ff5b7d0d6b76112977054dd928307f5f6863dfd6384ad.jpg",
+        "image_caption": [
+            "Fig. 16. The variation of the power of main equipment, shaft speed, and flow rate of primarily loop during the LOFA of primary loop."
+        ],
+        "image_footnote": [],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "$20\\%$  of the rated value at  $0s$  Due to the reduction of the generator torque, the speed of the shaft increases. The increase in shaft speed leads to an increase in turbine and compressor power. As shown in Fig. 19, as the power of the turbine and compressor increases, the turbine outlet temperature decreases and the compressor outlet temperature increases. The mechanical power generated by the turbomachinery system and the mechanical power consumed by external loads reached a new balance approximately 25 s after the accident occurred. During this accident, the power of the reactor remained almost unchanged, as shown in Fig. 18.",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "Figs. 17 and 18 show that this space reactor system can achieve a new balance by relying on self- stability even without intervention of shaft speed and reactor power control systems under this accident. However, more serious external load power loss accident will lead shaft over- speed and turbomachinery surging, which may threaten the safety of the system seriously.",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "In order to cope with more severe external load loss accidents, intervention of the shaft speed control system is required. A commonly used method to prevent turbine over- speed is to introduce a turbine bypass system. The by- pass valve (Fig. 2) will open to reduce the He- Xe mixture flow rate through the turbine when the shaft speed is too high, thereby reducing the power of the turbine. And due to the increase in flow into the compressor, the mechanical work consumed by the compressor increases. As a result, the shaft speed can maintain with in an acceptable range.",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "In order to demonstrate the shaft speed control capability of the bypass system, the total external load loss is considered. It is assumed that the external load suddenly drops from rated power to the  $0\\%$  of original value at the beginning of a transient accident. In order to avoid shaft over- speed and surging of turbine, the shaft speed control system controls the opening of the bypass valve 1 s after the accident happens due to the rapid increase in shaft speed. As shown in Fig. 20, after the bypass valve is opened, the flow rate of the bypass valve starts to increase immediately, and the flow rate of the turbine decreases immediately. As shown in Fig. 21, due to the decrease in turbine flow rate, turbine power begins to decrease. The flow rate of compressor increases to  $4.7\\mathrm{kg} / \\mathrm{s}$  form the rated value  $3.1\\mathrm{kg} / \\mathrm{s}$  in 7s. The increase of compressor flow rate and compressor inlet temperature also leads to increase of compressor power consumption. Part of high temperature and high pressure He- Xe mixture flows from the inlet of turbine to inlet of gas cooler through the turbine by- pass valve directly. The He- Xe gas mass flow rate entering the turbine is reduced, consequently the turbine power is reduced. The decrease in turbine output power and the increase in the compressor power consumption result in a slower increase in shaft speed. When the power consumed by the compressor exceeds the power output by the turbine, the shaft speed begins to decrease. During the transient process, the maximum shaft speed during this external load loss accident is  $65880~\\mathrm{rpm}$  .After  $7s,$  the flow rate of bypass valve and compressor starts to decrease, consequently the compressor power consumption starts to decrease. After  $50~s$  the shaft speed decreases to about  $20\\%$  of the rated value that the turbine output power and compressor power is relatively low (about  $2\\mathrm{kW}$  the whole system tends to be stabilized at actual output power of  $0\\mathrm{kW}$",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "In short, when a slight external load loss accident occurs, the system can achieve a new balance through its self- stability without external control system intervention. However, severe external load loss accidents can lead to a rapid increase in shaft speed, which may lead to over- speed of shaft and turbomachinery surging. Therefore, the intervention of the turbine bypass system is needed to control the shaft speed within the allowable operating limits.",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "3.2.4. Analysis of mass flow reduction in heat rejection loop",
+        "text_level": 1,
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "In this hypothesis accident, it is assumed that the coolant mass flow rate of the heat rejection loop decreases linearly from normal flow rate of  $2.4\\mathrm{kg} / \\mathrm{s}$  to  $1.5\\mathrm{kg} / \\mathrm{s}$  in  $10s$  due to the decrease of power supply to the electromagnetic pump of the third loop. The external load power is assumed to be invariant and the rotation shaft speed is not controlled. Fig. 22 shows the power consumed by compressor and turbine generated mechanical power. Fig. 23 displays the variation of inlet and outlet temperature of compressor and turbine. As shown in Fig. 22, as the result of the decrease of coolant mass flow rate of third loop, the compressor inlet temperature increases by 20K in  $30s$  The power consumed by compressor also increases. As the result of increased compressor power, the shaft power and shaft speed start to decrease. The mechanical power generated by turbine also decreases due to the decrease of shaft speed, which cause an increase in the outlet temperature of turbine and further reduce the rotational angular velocity of the shaft. As shown in Fig. 23, the shaft power pushing the shaft and alternator to rotate decrease and then increase after this accident happened. As the external load power keeps a constant value during this accident process, not until the shaft power increased to a value higher than external load power, did the shaft speed start to increase. With the increase of shaft speed, the turbine power and compressor power start to increase and finally stabilize at a new, lower level and the balance of generated torque and consumed torque by turbomachinery is reached again  $400s$  after the accident happens.",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "Above description reveals that the space reactor system can rebalance itself without control of reactor power and shaft speed under this mass flow reduction accident in heat rejection loop. The loss of flow accident will propagate to the primary loop by increasing coolant temperature of primary loop and introduce negative temperature reactivity feedback to reduce the reactor power. Due to the coaxial arrangement of the turbomachinery system, the turbomachinery system can achieve self- balance of torque under this accidental transient.",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "4. Conclusion",
+        "text_level": 1,
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "In this paper, the dynamic model of LCSR with He- Xe CRC including reactor core thermal- hydraulic model, neutron kinetics model, heat exchanger model, turbomachinery model including turbine, compressor and rotating shaft, heat pipe radiator model is established. By summarizing the calculation results, the following conclusions can be drawn:",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "(1) Under steady-state full power operating conditions, the output power of the turbine is  $302.4\\mathrm{kW}$  and the power consumed by the compressor is  $185.5\\mathrm{kW}$ . Mechanical power of  $116.9\\mathrm{kW}$  is converted to electrical power, which corresponding to thermoelectric conversion efficiency of  $31.1\\%$ . The steady-state calculation results of the system program are in good agreement with the design values, proving the correctness of the system model established in this paper.",
+        "page_idx": 12
+    },
+    {
+        "type": "image",
+        "img_path": "images/b67c2e73e415732074ce2615fcb67850b72dd110de50c1c5615a532ba3840fc7.jpg",
+        "image_caption": [
+            "Fig. 17. Temperature variation of various components during partial LOFA of primary loop."
+        ],
+        "image_footnote": [],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(2) This LCSR system shows perfect self-regulation ability under four transient accidental conditions considered in this paper because of the negative reactivity feedback and self-balance ability of turbomachinery benefiting from the coaxial layout of turbine and compressor. The reactor system can stabilize at new steady-state even without control of shaft speed and reactor power under these transient conditions considered in this paper except the severe external load loss.",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(3) In the LOFA of primary loop and LOFA in third loop, the reactor power is decreased due to the negative reactivity introduced to",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "the reactor core. In the LOFA of primary loop considered in this paper, the reactor power finally stabilized at  $363~\\mathrm{kW}$ , which is about 0.97 times of the rated power. In the LOFA of third loop considered in this paper, the reactor power stabilized finally stabilized at  $99\\%$  of the rated power. The change in rotational speed rebalance the turbomachinery to maintain the output power in these accidents.",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(4) Severe external load loss accidents require an external control system to control the shaft speed to prevent over-speed of shaft by reducing the power of the turbine and increasing the power",
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/c7c0bd0ed119d5cdfce8fa7dd2c36dfcd3f7f6aefe5153c34b107aa3cd90725f.jpg",
+        "image_caption": [
+            "Fig. 18. The variation of the power of main equipment, shaft speed during loss of external load."
+        ],
+        "image_footnote": [],
+        "page_idx": 14
+    },
+    {
+        "type": "image",
+        "img_path": "images/215eb45fa03c97f357fc3e10b903e5304608fad8954c3a6e6a547d85ae03cdd6.jpg",
+        "image_caption": [
+            "Fig. 19. Temperature variation inlet and outlet temperature of turbomachinery during the loss of external load."
+        ],
+        "image_footnote": [],
+        "page_idx": 14
+    },
+    {
+        "type": "image",
+        "img_path": "images/5a3acda54c8b71b00af9bad0d95f1d3cf5b28eaf43b94942e52aed0aa12717e5.jpg",
+        "image_caption": [
+            "Fig. 20. Mass flow rate of compressor, turbine, and by pass valve during total external load loss transient."
+        ],
+        "image_footnote": [],
+        "page_idx": 14
+    },
+    {
+        "type": "image",
+        "img_path": "images/eb2d15716c1a682a5bc49044cdb059e80e30914a5dcb6655988dfe1ee26cafbb.jpg",
+        "image_caption": [
+            "Fig. 21. Compressor power, turbine power, and shaft speed variation during total external load loss transient."
+        ],
+        "image_footnote": [],
+        "page_idx": 14
+    },
+    {
+        "type": "image",
+        "img_path": "images/a36c28890d25350f72f27207c3d81a5633ac7657ceca885f4581ae1cfe20bfd1.jpg",
+        "image_caption": [
+            "Fig. 22. The variation of the power of main equipment, shaft speed during the mass flow rate reduction in heat rejection loop."
+        ],
+        "image_footnote": [],
+        "page_idx": 14
+    },
+    {
+        "type": "image",
+        "img_path": "images/1706b830d90e0ed2b14f9b574ba3d5fc3c9f29f08c9d53d2096644531fded51a.jpg",
+        "image_caption": [
+            "Fig. 23. Temperature variation of various components during mass flow reduction in heat rejection loop."
+        ],
+        "image_footnote": [],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "consumption of the compressor. During the external load loss accidents process, the maximum shaft speed during this external load loss accident is  $65880~\\mathrm{rpm}$ . After the accident, the shaft speed decreases to about  $20\\%$  of the rated value that the turbine output power and compressor power is about  $2\\mathrm{kW}$ , the whole system tends to be stabilized at actual output power of  $0\\mathrm{kW}$ . With the involve of bypass system and the control of bypass valve, the shaft speed can maintain an acceptable range.",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "CRediT authorship contribution statement",
+        "text_level": 1,
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Zongyun Wu: Methodology, Software, Writing - original draft.",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Tiancai Liu: Supervision. Lin Qi: Resources. Lin Sun: Data curation. Hongwei Yang: Validation. Mingyu Wu: Methodology, Validation.",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Declaration of competing interest",
+        "text_level": 1,
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Data availability",
+        "text_level": 1,
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Data will be made available on request.",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Appendix A. Thermal property correlations for He-Xe mixture",
+        "text_level": 1,
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "A.1 density of He-Xe mixture",
+        "text_level": 1,
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "The density of He- Xe binary mixture gas is calculated with the virial state equation, in which the compressibility factor  $Z$  is assumed as a second order polynomial of the molar density.",
+        "page_idx": 15
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nP = \\frac{\\rho R_g TZ}{M} = R_gT\\big[\\widehat{\\rho} +\\overline{B}\\widehat{\\rho}^2 +\\overline{C}\\widehat{\\rho}^3\\big] \\tag{A.1}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Where,  $\\hat{\\rho}$  is molar density of He- Xe mixture,  $\\overline{B}$  is the second virial coefficient of He- Xe mixture, and  $\\overline{C}$  is third virial coefficient of He- Xe mixture.",
+        "page_idx": 15
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{rl} & {\\overline{B} = x_{He}^{2}B_{He} + 2x_{He}x_{Xe}B_{He,Xe} + x_{Xe}B_{Xe}}\\\\ & {\\overline{C} = x_{He}^{3}C_{He} + x_{He}^{2}x_{Xe}C_{He,He,Xe} + x_{He}x_{Xe}^{2}C_{He,Xe,Xe} + x_{Xe}^{3}C_{Xe}} \\end{array} \\tag{A.3}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "$B_{He}$  is the second virial coefficient of pure Helium gas,  $B_{Xe}$  is the second viral coefficient of pure Xeon, and  $B_{He,Xe}$  is the second viral interaction coefficient.  $C_{He}$  the third viral coefficient of pure Helium gas,  $C_{Xe}$  is the third viral coefficient of pure Xeon,  $C_{He,He,Xe}$  and  $C_{He,Xe,Xe}$  are the third viral interaction coefficient.",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "The second and third viral coefficient of pure Helium and pure Xeon are given as:",
+        "page_idx": 15
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l}{B_{He}[cm^3 /mole] = 8.4 - 0.0018\\times T + \\frac{115.0}{\\sqrt{T}} -\\frac{835.0}{T}}\\\\ {}\\\\ {B_{Xe} = -102.6 + \\left(102.732 - 0.001\\times \\theta -\\frac{0.44}{\\theta^{1.22}}\\right)\\times \\tanh (4.5) = \\Psi_{\\mathrm{B}}(\\theta_{Xe})} \\end{array} \\tag{A.4}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 15
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nC_{He} = 0.0 \\tag{A.6}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 15
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nC_{Xe} = \\left[R_g\\left(\\frac{T_{cr}}{P_{cr}}\\right)_{He}\\right]^2\\left[0.0757 + \\left(-0.0862 - 3.6E^{-5}\\theta_{Xe} + \\frac{0.0237}{\\theta_{Xe}^{0.059}}\\right)\\times \\tanh (0.84\\theta_{Xe})\\right] \\tag{A.7}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Where  $\\theta_{Xe}$  is define as the ratio of temperature  $T$  to critical temperature of Xeon  $\\theta_{Xe} = \\frac{T}{T_{cr,Xe}}$ . The interaction viral coefficient of He- Xe mixture is given as:",
+        "page_idx": 15
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{rl} & {B_{He,Xe} = V_{He,Xe}^{*}\\times \\Psi_{\\mathrm{B}}\\left(T / T_{He,Xe}^{*}\\right)}\\\\ & {V_{He,Xe}^{*} = B_{s}\\left[\\left(T_{cr}\\right)_{He} + \\left(T_{cr}\\right)_{Xe}\\right]}\\\\ & {T_{He,Xe}^{*} = \\frac{4\\beta}{\\left(1 + \\beta\\right)^{2}}\\sqrt{T_{cr,He}T_{cr,Xe}},where\\beta = \\frac{\\left(T_{cr} / P_{cr}\\right)_{He}}{\\left(T_{cr} / P_{cr}\\right)_{Xe}}}\\\\ & {C_{He,He,Xe} = \\left(C_{He}^{2}C_{Xe}\\right)^{1 / 3} = 0.0,C_{He,Xe,Xe} = \\left(C_{He}C_{Xe}^{2}\\right)^{\\frac{1}{3}} = 0.0} \\end{array} \\tag{A.10}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "A.2 Viscosity of He-Xe mixture",
+        "text_level": 1,
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "The viscosity of He- Xe mixture is calculated using the following empirical correlation:",
+        "page_idx": 15
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\overline{u} (T,P) = \\overline{u}^{0}(T) + \\left(1 - \\frac{1}{2.3}\\right)\\overline{u}^{*}\\times \\Psi_{u}\\left(\\frac{0.291\\times\\overline{V}^{*}}{M}\\rho\\right) \\tag{A.12}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "Where,  $\\overline{u}^{0}(T)$  is the viscosity of a dilute He- Xe binary gas mixture, calculated using the Chapman- Enskog kinetic approach:",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\overline{u}^{0}(T) = u_{He}^{0} / \\left(1 + \\phi_{He,Xe}x_{He} / x_{He}\\right) + u_{Xe}^{0} / \\left(1 + \\phi_{Xe,He}x_{He} / x_{Xe}\\right) \\tag{A.13}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "The interaction coefficients  $\\phi_{He,Xe}$  and  $\\phi_{Xe,He}$  are define as:",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l}\\phi_{He,Xe} = \\frac{u_{He}^{0}}{u_{He,Xe}}\\left[2\\frac{m_{He}m_{Xe}}{(m_{He} + m_{Xe})^{2}}\\right]\\left[\\frac{5}{2A_{He,Xe}} +\\frac{m_{Xe}}{m_{He}}\\right]\\\\ \\displaystyle \\phi_{Xe,He} = \\frac{u_{Xe}^{0}}{u_{He,Xe}}\\left[2\\frac{m_{He}m_{Xe}}{(m_{He} + m_{Xe})^{2}}\\right]\\left[\\frac{5}{2A_{He,Xe}^{*}} +\\frac{m_{He}}{m_{Xe}}\\right] \\end{array} \\tag{A.14}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "Where the interaction viscosity  $u_{He,Xe} = 3.41\\mathrm{E}^{- 7}(T - 45.89)^{0.6587}$ , and  $A_{He,Xe}^{*}$  is a very slow varying function of temperature, is taken as constant  $(A_{He,Xe}^{*} = 1.10)$ .",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "$\\Psi_{u}(\\rho_{r})$  is the unique function of reduced density  $\\rho_{r}$ .",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\Psi_{u}(\\rho_{r}) = 0.0221\\rho_{r} + 1.062\\rho_{r} - 0.509\\rho_{r}^{3} + 0.225\\rho_{r}^{4} \\tag{A.16}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "$\\overline{V}^{*}$  is the \"pseudo- critical\" molar volume of binary He- Xe gas mixture, which is formulated as follows:",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\overline{V}_{He,Xe}^{*} = x_{He}R_{g}\\left(\\frac{T_{cr}}{P_{cr}}\\right)_{He} + x_{Xe}R_{g}\\left(\\frac{T_{cr}}{P_{cr}}\\right)_{Xe} \\tag{A.17}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "The \"pseudo- critical\" viscosity  $\\overline{u}^{*}$  is calculated as:",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\overline{u}^{*} = 0.204\\times 10^{-1}\\frac{\\sqrt{M\\overline{T}^{*}}}{(0.291\\times\\overline{V}^{*})^{2 / 3}} \\tag{A.18}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "Where,  $\\overline{M} = x_{He}M_{He} + x_{Xe}M_{Xe}$  is the molecular weight of He- Xe mixture. The \"Pseudo- critical\" temperature  $\\overline{T}^{*}$  is expressed as:",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\overline{T}^{*} = \\frac{R_{g}}{\\overline{V}_{He,Xe}^{*}}\\left(x_{He}^{2}r_{cr,He}\\left(\\frac{T_{cr}}{P_{cr}}\\right)_{He} + x_{Xe}^{2}T_{cr,Xe}\\left(\\frac{T_{cr}}{P_{cr}}\\right)_{Xe} + 2\\lambda_{He,Xe}T_{He,Xe}^{*}\\overline{V}_{He,Xe}^{*}\\right) \\tag{A.19}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "A.3 Thermal conductivity of He-Xe mixture",
+        "text_level": 1,
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "The conductivity of binary gas mixture is expressed as:",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\overline{\\lambda} (T,P) = \\overline{\\lambda}^{0}(T) + \\left(1 - \\frac{1}{2.94}\\right)\\overline{\\lambda}^{*}\\times \\Psi_{\\lambda}\\left(\\frac{0.291\\times\\overline{V}^{*}}{M}\\rho\\right) \\tag{A.20}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "The \"Pseudo- critical\" conductivity of the He- Xe mixture,  $\\overline{\\lambda}^{*}$ , is calculated as:",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\overline{\\lambda}^{*} = \\frac{0.304E^{-4}(T^{*})^{0.277}}{\\overline{M}^{0.465}(0.291\\times\\overline{V}^{*})^{0.415}} \\tag{A.21}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "$\\overline{\\lambda}^{0}(T)$  is calculated with the Chapman- Enskog approach.",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\overline{\\lambda}^{0} = \\left[\\frac{x_{He}^{2}}{L_{He}} -2\\frac{x_{He}x_{Xe}L_{He,Xe}}{L_{He}L_{Xe}} +\\frac{x_{e}^{2}}{L_{Xe}}\\right]\\times \\left[1 - \\frac{L_{He,Xe}}{L_{He}L_{Xe}}\\right]^{-1} \\tag{A.22}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "Where:",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nL_{He} = \\frac{x_{He}^{2}}{\\lambda_{He}^{0}} +\\frac{x_{He}x_{Xe}}{2\\lambda_{He,Xe}}\\frac{(15 / 2)m_{He}^{2} + (25 / 4)m_{Xe}^{2} - 3m_{Xe}^{2}B_{He,Xe}^{*} + 4m_{He}m_{Xe}A_{He,Xe}^{*}}{(m_{He} + m_{Xe})^{2}A_{He,Xe}^{*}} \\tag{A.23}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{rl} & L_{Xe} = \\frac{x_{Xe}^{2}}{\\lambda_{Xe}^{0}} +\\frac{x_{He}x_{Xe}}{2\\lambda_{He,Xe}}\\frac{(15 / 2)m_{Xe}^{2} + (25 / 4)m_{He}^{2} - 3m_{He}^{2}B_{He,Xe} + 4m_{He}m_{Xe}A_{He,Xe}^{*}}{(m_{He} + m_{Xe})^{2}A_{He,Xe}^{*}}\\\\ & L_{He,Xe} = -\\frac{x_{He}x_{Xe}}{\\lambda_{He,Xe}}\\frac{m_{He}m_{Xe}}{(m_{He} + m_{Xe})^{2}A_{He,Xe}^{*}}\\left(\\frac{55}{4} -3B_{12}^{*} - 4A_{12}^{*}\\right) \\end{array} \\tag{A.25}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "Where the coefficient  $B_{12}^{*}$  is a slow varying function of  $\\overline{T}^{*}$ , is taken as constant (1.10).  $\\lambda_{He,Xe}$  is related to  $u_{He,Xe}$  as:",
+        "page_idx": 16
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\lambda_{He,Xe} = \\frac{15}{4} u_{He,Xe}\\frac{k}{m_{12}} u_{He,Xe}f_{He,Xe},where f_{He,Xe} = 1.060 \\tag{A.26}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "A.4 Enthalpy and specific Heat of He-Xe mixture",
+        "text_level": 1,
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "The specific enthalpy of He- Xe mixture can be calculated from the fundamental thermodynamic relationships:",
+        "page_idx": 17
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l}{\\widehat{H}(T,P) = \\widehat{H}(T_0) + \\widehat{C_p^0} (T - T_0) + \\widehat{\\rho} R_gT\\bigg[\\bigg(\\overline{B} -\\frac{Td\\overline{B}}{dT}\\bigg) + \\widehat{\\rho}\\bigg(\\overline{C} -\\frac{T}{2}\\frac{d\\overline{C}}{dT}\\bigg)\\bigg]}\\\\ {\\widehat{C_p^0} = \\bigg[\\frac{\\partial\\widehat{H}}{\\partial T}\\bigg]_P = \\widehat{C_p^0} +\\widehat{\\rho} R_g\\bigg(\\overline{B} -T\\frac{d\\overline{B}}{dT} -T^2\\frac{d^2\\overline{B}}{dT^2}\\bigg) + \\widehat{\\rho}^2 R_g\\bigg[\\overline{C} -\\frac{T^2}{2}\\bigg]\\frac{d^2\\overline{C}}{dT^2} +R_gT\\bigg[\\bigg(\\overline{B} -\\frac{Td\\overline{B}}{dT}\\bigg) + \\widehat{\\rho}\\bigg(2\\overline{C} -\\frac{Td\\overline{C}}{dT}\\bigg)\\bigg]\\times \\bigg[\\frac{\\partial\\widehat{\\rho}}{\\partial T}\\bigg]_P}\\\\ {\\widehat{C_\\nu} = \\bigg[\\frac{\\partial\\widehat{H}}{\\partial T}\\bigg]_\\widehat{\\rho} = \\widehat{C_\\nu} -\\widehat{\\rho} R_gT\\bigg(2\\overline{B}\\frac{d\\overline{B}}{dT} +\\frac{Td^2\\overline{B}}{dT^2}\\bigg) + \\widehat{\\rho} R_gT\\bigg(\\frac{d\\overline{C}}{dT} -\\frac{T}{2}\\frac{d^2C}{dT^2}\\bigg)} \\end{array} \\tag{A.29}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Where:",
+        "page_idx": 17
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\left[\\frac{\\partial\\widehat{\\rho}}{\\partial T}\\right]_P = \\frac{\\left(-(\\widehat{\\rho} + B\\widehat{\\rho}^2 + C\\rho^3)\\big / T + \\frac{d\\overline{B}}{d\\overline{T}}\\widehat{\\rho} + \\frac{d\\overline{C}}{d\\overline{T}}\\widehat{\\rho}^3\\right)}{1 + 2\\overline{B}\\widehat{\\rho} + 3C\\widehat{\\rho}^2} \\tag{A.30}\n$$\n",
+        "text_format": "latex",
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Where  $\\widehat{C_p^0} = 5R_g / 2$  and  $\\widehat{C_V^0} = 3R_g / 2$  are the ideal values for a dilute gas, and the virial coefficients  $\\overline{B}$  and  $\\overline{C}$  are calculated using Eq. A.2 and A.3 respectively.",
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "References",
+        "text_level": 1,
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Araujo, E.F., Guimaraes, L.N.F., 2018. American space nuclear electric systems. J. Aero. Technol. Manag. 10. Ashcroft, J., Eshelman, C., 2007. Summary of NR program Prometheus efforts. In: Presented at: Space Technology and Applications International Forum. AIP Conference Proceedings, https://doi.org/10.1063/1.237499. Maryland, USA. Davison, H.W., 1968. Compilation of Thermophysical Properties of Liquid Lithium. Dochat, G.R., Dhar, M., 2008. Free- piston Stirling engine system considerations for various space power applications[J]. American Institute of Physics AIP. https://doi.org/10.1063/1.40059. Ei- Genk, Mohamed S., Xue, Huimin, Prammonov, Dmitry, 1994. Transient analysis and startup simulation of a thermionic space nuclear reactor system. Nucl. Technol. 105 (1), 70- 86. Dai, Z., Wang, C., Zhang, D., et al., 2020. Numerical simulation on thermal- hydraulic and thermoelectric characteristics of the TOPAZ- II reactor core. Int. J. Energy Res. 2. Johnson, R.A., Morgan, W.T., Rocklin, S.R., 1967. Design, ground test and flight test of SNAP 10A, first reactor in space. Nucl. Eng. Des. 5 (1), 7- 21. Ma, Q., Sun, P., Wei, X., Jia, Y., 2022. Dynamic model construction of a space thermionic nuclear reactor. Appl. Therm. Eng. https://doi.org/10.1016/j.applthermaleng.2022.118644. Mason, L.S., Rodriguez, C.D., Mckissook, B.I., et al., 1992. SP- 100 reactor with Brayton conversion for lunar surface applications[C]. In: Proceedings of the Ninth Symposium on Space Nuclear Power Systems. American Institute of Physics. Mason, E., Uribe, F., 1996. The corresponding- state principle: dilute gases. In: Millat, J., Dymond, J., Nieto de Castro, E. (Eds.), Transport Properties of Fluids. Cambridge University Press, pp. 250- 282. Palac, D.T., Mason, L.S., Houts, M.G., Harlow, S., 2011. Fission Surface Power Technology Development Update. TM- 2011- 216976). NASA Technical Report. Randall, T., 2005. Prometheus Project Final Report. (982- R120461). NASA Technical Report. Ribney, G.R., Pearson, L., 2019. Parametric evaluation of heat pipe- radiative stability for nuclear space power systems. Therm. Sci. Eng. Prog. 13 (C), 100368- 100368. Schmitz, P.C., Mason, L.S., 1991. Space Reactor/Stirling Cycle Systems for High Power Lunar applications[J]. American Institute of Physics. Smith, J.M., 1989. SP- 100 nuclear space power systems with application to space commercialization. In: Presented at: Space Commercialization: Roles of Developing Countries. Nashville, USA. Tang, S., Sun, H., Wang, C., et al., 2019. Transient thermal- hydraulic analysis of thermionic space reactor TOPAZ- II with modified RELAP5. Prog. Nucl. Energy 112 (APR), 209- 224. Thermal- hydraulic analysis of gas- cooled space nuclear reactor power system with closed Brayton cycle. Int. J. Energy Res., 2020. https://doi.org/10.1002/er.5813.",
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Tian, Zhixing, Wang, Chenglong, Guo, Kailun, et al., 2023. A review of liquid metal high temperature heat pipes: theoretical model, design, and application. Int. J. Heat Mass Tran. 214, 124434. ISSN 0017- 9310. Tournier, J.M., El- Genk, M., Gallo, B., 2006. Best Estimates of Binary Gas Mixtures Properties for Closed Brayton Cycle Space applications[C]//4th International Energy Conversion Engineering Conference and Exhibit (IECEC), p. 4154. Upadhyaya, B.R., Zhao, K., Perillo, S., et al., 2007. Autonomous control of space reactor systems[R]. office of scientific & technical information technical reports. United States: N. p. https://doi.org/10.2172/920999b. Voss, S.S., 1994. TOPAZ- II system description. In: Presented at the Space 1994: International Conference and Exposition on Engineering, Construction, and Operations in Space. Albuquerque, NM, 26 Feb. - 3 Mar. 1994. Wang, C., Zhang, R., Guo, K., et al., 2021. Dynamic simulation of a space gas- cooled reactor power system with a closed Brayton cycle. Front. Energy (1). Wang, Chenglong, Zhang, Zhipeng, Zhang, Minghao, et al., 2022. Numerical evaluation of non- condensable gas influence on the heat transfer characteristics of high- temperature lithium heat pipe during reactor operation. Ann. Nucl. Energy 173, 19077. https://doi.org/10.1016/j.anucene.2022.109077. ISSN 0306- 4549. Wright, S.A., Lipinski, R.J., Vernon, M.E., ancel., 2006. Closed Brayton Cycle Power Conversion Systems for Nuclear Reactors: Modeling, Operations, and Validation. Sandia National Laboratories, New Mexico. Wu, Zongyun, Qi, Lin, Sun, Lin, et al., 2023. Transient thermal- hydraulic analysis of the thermionic space reactor TOPAZ- II. Ann. Nucl. Energy 194, 110054. ISSN 0306- 4549. Zhang, W., Ma, Z., Zhang, D., et al., 2016. Transient thermal- hydraulic analysis of a space thermionic reactor. Ann. Nucl. Energy 89 (Mar.), 38- 49. Zhang, W., Zhang, D., Liu, X., et al., 2020. Thermal- hydraulic analysis of the thermoelectric space reactor power system with a potassium heat pipe radiator. Feb. Ann. Nucl. Energy 136, 107018.1- 107018.9. Zhang, Jiarui, Tian, Zhixing, Guo, Kailun, et al., 2023. Investigations on thermoelectric characteristic of heat pipe thermoelectric generator waste heat utilization device in nuclear power system. Nucl. Eng. Des. 407, 112299 https://doi.org/10.1016/j.nucengdes.2023.112299. ISSN 0029- 5493. Zhiwen, D., Chenglong, W., Dalin, Z., et al., 2020. Thermoelectric characteristics analysis of thermionic space nuclear power reactor. Int. J. Energy Res. (2), 44. https://doi.org/10.1002/er.4926. Zhu, Enping, Wang, Zhao, Ma, Jia, Shen, Lanting, Chai, Xiang, Liu, Xiaoqing, 2023a. Transient multiphysics characteristics of a space thermionic reactor based on a coupling analysis. Nuclear Engineering and Design 401, 112064. https://doi.org/10.1016/j.nucengdes.2022.112064. ISSN 0029- 5493. Zhu, Enping, Li, Tao, Xiong, Jinbiao, Chai, Xiang, Zhang, Tengfei, Liu, Xiaoqing, 2023b. A super- real- time three- dimension computing method of digital twins in space nuclear power. Comput. Methods Appl. Mech. Eng. 417 (Part A) https://doi.org/10.1016/j.cma.2023.116444, 116444, ISSN 0045- 7825.",
+        "page_idx": 17
+    }
+]
