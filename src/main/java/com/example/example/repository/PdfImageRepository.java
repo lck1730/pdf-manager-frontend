@@ -25,6 +25,14 @@ cha     * 根据PDF文档ID查找所有关联的图片的image_name、caption和
     List<Object> findImageNameCaptionAndFootnoteByPdfId(@Param("pdfId") String pdfId);
     
     /**
+     * 根据PDF文档ID查找所有关联的图片记录
+     * 
+     * @param pdfId PDF文档ID
+     * @return 图片记录列表
+     */
+    List<PdfImage> findByPdfId(String pdfId);
+    
+    /**
      * 根据图片名称查找图片
      * 
      * @param imageName 图片名称

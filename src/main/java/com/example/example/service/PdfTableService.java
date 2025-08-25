@@ -42,10 +42,26 @@ public class PdfTableService {
     public PdfTable updateCaptionAndFootnoteByTableId(Long tableId, String caption, String footnote) {
         PdfTable pdfTable = pdfTableRepository.findByTableId(tableId);
         if (pdfTable != null) {
-            pdfTable.setCaption(caption);
-            pdfTable.setFootnote(footnote);
+            // 只有当caption非空时才更新caption字段
+            if (caption != null && !caption.isEmpty()) {
+                pdfTable.setCaption(caption);
+            }
+            // 只有当footnote非空时才更新footnote字段
+            if (footnote != null) {
+                pdfTable.setFootnote(footnote);
+            }
             return pdfTableRepository.save(pdfTable);
         }
         return null;
+    }
+    
+    /**
+     * 根据PDF ID删除表格记录
+     * 
+     * @param pdfId PDF文档ID
+     */
+    public void deleteByPdfId(String pdfId) {
+        List<PdfTable> tables = pdfTableRepository.findByPdfId(pdfId);
+        pdfTableRepository.deleteAll(tables);
     }
 }

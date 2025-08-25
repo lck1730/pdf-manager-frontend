@@ -53,10 +53,25 @@ public class PdfImageService {
         Optional<PdfImage> pdfImageOpt = pdfImageRepository.findByImageName(imageName);
         if (pdfImageOpt.isPresent()) {
             PdfImage pdfImage = pdfImageOpt.get();
-            pdfImage.setCaption(caption);
-            pdfImage.setFootnote(footnote);
+            // 只有当caption非空时才更新caption字段
+            if (caption != null && !caption.isEmpty()) {
+                pdfImage.setCaption(caption);
+            }
+            // 只有当footnote非空时才更新footnote字段
+            if (footnote != null) {
+                pdfImage.setFootnote(footnote);
+            }
             return Optional.of(pdfImageRepository.save(pdfImage));
         }
         return Optional.empty();
+    }
+    
+    /**
+     * 根据图片名称删除图片记录
+     * 
+     * @param imageName 图片名称
+     */
+    public void deleteByImageName(String imageName) {
+        pdfImageRepository.deleteById(imageName);
     }
 }

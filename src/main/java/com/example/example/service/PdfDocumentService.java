@@ -66,4 +66,13 @@ public class PdfDocumentService {
         }
         return null;
     }
+    
+    /**
+     * 根据PDF ID删除PDF文档记录
+     * 
+     * @param pdfId PDF文档ID
+     */
+    public void deleteByPdfId(String pdfId) {
+        pdfDocumentRepository.deleteById(pdfId);
+    }
 }
