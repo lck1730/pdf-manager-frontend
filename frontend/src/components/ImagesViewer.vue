@@ -1,6 +1,5 @@
 <template>
   <div class="images-viewer section">
-    <h3>图片信息</h3>
     <div v-if="images && images.length > 0" class="images-content">
       <div class="image-navigation" v-if="images.length > 1">
         <button :disabled="currentIndex <= 0" @click="prevImage">‹</button>
@@ -180,11 +179,6 @@ export default {
   border-radius: 8px;
   background-color: #f8f9fa;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.images-viewer h3 {
-  margin-top: 0;
-  color: #333;
 }
 
 .images-content {

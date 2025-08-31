@@ -42,7 +42,34 @@ onMounted(() => {
 
     <!-- 右侧内容展示区 (3/4宽度) -->
     <div class="content-area">
-      <PdfViewer v-if="selectedPdfComputed" :pdf="selectedPdfComputed" />
+      <div v-if="selectedPdfComputed" class="five-cards-layout">
+        <div class="grid-container">
+          <!-- 左上角卡片：宽40%，高10% -->
+          <div class="card card-a">
+            <h3>标签区域</h3>
+          </div>
+
+          <!-- 左中卡片：宽40%，高45% -->
+          <div class="card card-b">
+            <h3>信息区域</h3>
+          </div>
+
+          <!-- 左下卡片：宽40%，高45% -->
+          <div class="card card-c">
+            <h3>备注区域</h3>
+          </div>
+
+          <!-- 右上卡片：宽60%，高55% -->
+          <div class="card card-d">
+            <h3>表格区域</h3>
+          </div>
+
+          <!-- 右下卡片：宽60%，高45% -->
+          <div class="card card-e">
+            <h3>图片区域</h3>
+          </div>
+        </div>
+      </div>
       <div v-else class="placeholder">
         <div class="welcome-message">
           <div class="welcome-icon">📚</div>
@@ -54,8 +81,8 @@ onMounted(() => {
   </div>
 </template>
 
-<style>
-html, body {
+
+<style>html, body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -65,8 +92,7 @@ html, body {
 }
 </style>
 
-<style scoped>
-* {
+<style scoped>* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -95,7 +121,7 @@ html, body {
 .content-area {
   width: 75%;
   overflow: hidden;
-  background-color: #5d8630;
+  background-color: #ffffff;
 }
 
 .section h3 {
@@ -152,5 +178,94 @@ html, body {
 
 .content-area::-webkit-scrollbar-thumb:hover {
   background: #a1a1a1;
+}
+
+/* 五卡片布局样式 */
+.five-cards-layout {
+  height: 100%;
+  position: relative;
+  padding: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 10% 45% 45%;
+  gap: 15px;
+  height:  calc(100% - 30px);
+  width: 100%;
+}
+
+.card {
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* 左上角卡片 - 标签区域 */
+.card-a {
+  grid-column: 1;
+  grid-row: 1;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+}
+
+/* 左中卡片 - 信息区域 */
+.card-b {
+  grid-column: 1;
+  grid-row: 2;
+  background: linear-gradient(135deg, #f1f8e9, #c8e6c9);
+}
+
+/* 左下卡片 - 备注区域 */
+.card-c {
+  grid-column: 1;
+  grid-row: 3;
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+}
+
+/* 右上卡片 - 表格区域 */
+.card-d {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+}
+
+/* 右下卡片 - 图片区域 */
+.card-e {
+  grid-column: 2;
+  grid-row: 3;
+  background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+}
+
+.card h3 {
+  color: #333;
+  font-weight: 600;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .grid-container {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .card {
+    width: 100% !important;
+    height: 150px !important;
+    margin-bottom: 20px;
+  }
 }
 </style>

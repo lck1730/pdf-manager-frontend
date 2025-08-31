@@ -1,30 +1,26 @@
 <template>
   <div class="pdf-tags section">
-    <h3>标签管理</h3>
+    <h3>PDF标签</h3>
     <div class="tags-content">
-      <div class="existing-tags">
-        <div v-if="tags.length > 0" class="tags-list">
-          <span 
-            v-for="tag in tags" 
-            :key="tag" 
-            class="tag-item"
-          >
-            {{ tag }}
-            <button class="remove-tag-btn" @click="removeTag(tag)">×</button>
-          </span>
+      <div class="tag-list">
+        <span 
+          v-for="tag in tags" 
+          :key="tag" 
+          class="tag-item"
+          @click="removeTag(tag)"
+        >
+          {{ tag }} ×
+        </span>
+        <div class="add-tag-wrapper">
+          <input 
+            v-model="newTag" 
+            type="text" 
+            class="tag-input" 
+            placeholder="添加标签..." 
+            @keyup.enter="addTag"
+          />
+          <button class="add-tag-btn" @click="addTag">+</button>
         </div>
-        <div v-else class="no-tags">暂无标签</div>
-      </div>
-      
-      <div class="add-tag-section">
-        <input 
-          v-model="newTag" 
-          type="text" 
-          class="tag-input" 
-          placeholder="输入新标签" 
-          @keyup.enter="addTag"
-        />
-        <button class="add-tag-btn" @click="addTag">添加标签</button>
       </div>
     </div>
   </div>
@@ -32,7 +28,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { pdfService } from '@/services/pdfService'
+import { tagService } from '@/services/tagService'
 
 const props = defineProps({
   pdf: {
@@ -45,27 +41,23 @@ const tags = ref([])
 const newTag = ref('')
 
 // 获取PDF标签
-const fetchTags = async (pdfId) => {
+const fetchPdfTags = async (pdfId) => {
   try {
-    const response = await pdfService.getTagsByPdfId(pdfId)
+    const response = await tagService.getTagsByPdfId(pdfId)
     tags.value = response.data || []
   } catch (error) {
-    console.error('获取标签失败:', error)
+    console.error('获取PDF标签失败:', error)
     tags.value = []
   }
 }
 
 // 添加标签
 const addTag = async () => {
-  if (!props.pdf || !newTag.value.trim()) return
+  if (!newTag.value.trim() || !props.pdf) return
   
   try {
-    // 发送到后端添加标签
-    await pdfService.addTag(props.pdf.id, newTag.value.trim())
-    // 更新本地标签列表
-    if (!tags.value.includes(newTag.value.trim())) {
-      tags.value.push(newTag.value.trim())
-    }
+    await tagService.addTagToPdf(props.pdf.id, newTag.value.trim())
+    tags.value.push(newTag.value.trim())
     newTag.value = ''
   } catch (error) {
     console.error('添加标签失败:', error)
@@ -74,14 +66,12 @@ const addTag = async () => {
 }
 
 // 删除标签
-const removeTag = async (tag) => {
+const removeTag = async (tagToRemove) => {
   if (!props.pdf) return
   
   try {
-    // 发送到后端删除标签
-    await pdfService.deleteTag(props.pdf.id, tag)
-    // 更新本地标签列表
-    tags.value = tags.value.filter(t => t !== tag)
+    await tagService.removeTagFromPdf(props.pdf.id, tagToRemove)
+    tags.value = tags.value.filter(tag => tag !== tagToRemove)
   } catch (error) {
     console.error('删除标签失败:', error)
     alert('删除标签失败: ' + (error.message || '未知错误'))
@@ -91,7 +81,7 @@ const removeTag = async (tag) => {
 // 监听PDF变化
 watch(() => props.pdf, (newPdf) => {
   if (newPdf && newPdf.id) {
-    fetchTags(newPdf.id)
+    fetchPdfTags(newPdf.id)
   } else {
     tags.value = []
   }
@@ -100,91 +90,99 @@ watch(() => props.pdf, (newPdf) => {
 
 <style scoped>
 .pdf-tags {
-  padding: 15px;
-  border-radius: 8px;
-  background-color: #f8f9fa;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .pdf-tags h3 {
   margin-top: 0;
   color: #333;
+  flex-shrink: 0;
 }
 
 .tags-content {
-  margin-top: 15px;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.existing-tags {
-  margin-bottom: 20px;
-  min-height: 30px;
-}
-
-.tags-list {
+.tag-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.tag-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tag-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.tag-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.tag-list::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 
 .tag-item {
-  display: flex;
-  align-items: center;
-  background-color: #007bff;
-  color: white;
-  padding: 4px 10px;
+  padding: 6px 12px;
+  background-color: #e0e7ff;
+  color: #4f46e5;
   border-radius: 20px;
   font-size: 14px;
-}
-
-.remove-tag-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
   cursor: pointer;
-  margin-left: 6px;
-  padding: 0;
-  width: 20px;
-  height: 20px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tag-item:hover {
+  background-color: #c7d2fe;
+  transform: translateY(-2px);
+}
+
+.add-tag-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.remove-tag-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-}
-
-.no-tags {
-  color: #999;
-  font-style: italic;
-}
-
-.add-tag-section {
-  display: flex;
-  gap: 10px;
+  margin-top: 10px;
+  gap: 5px;
+  flex-shrink: 0;
 }
 
 .tag-input {
   flex: 1;
   padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-family: inherit;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+}
+
+.tag-input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .add-tag-btn {
-  padding: 8px 16px;
-  background-color: #28a745;
+  padding: 8px 15px;
+  background-color: #4f46e5;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
   font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
 .add-tag-btn:hover {
-  background-color: #218838;
+  background-color: #4338ca;
 }
 </style>

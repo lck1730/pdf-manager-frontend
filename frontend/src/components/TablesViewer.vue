@@ -1,6 +1,5 @@
 <template>
   <div class="tables-viewer section">
-    <h3>表格信息</h3>
     <div v-if="tables && tables.length > 0" class="tables-content">
       <div class="table-navigation" v-if="tables.length > 1">
         <button :disabled="currentIndex <= 0" @click="prevTable">‹</button>
@@ -153,11 +152,6 @@ export default {
   border-radius: 8px;
   background-color: #f8f9fa;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.tables-viewer h3 {
-  margin-top: 0;
-  color: #333;
 }
 
 .tables-content {

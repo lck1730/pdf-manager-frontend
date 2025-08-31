@@ -2,14 +2,14 @@
   <div class="pdf-note section">
     <h3>PDF备注</h3>
     <div class="note-content">
-      <div v-if="!isEditing">
+      <div v-if="!isEditing" class="note-display-wrapper">
         <div class="note-display">
           <pre v-if="note">{{ note }}</pre>
           <p v-else class="no-note">暂无备注</p>
         </div>
         <button class="edit-btn" @click="startEdit">编辑</button>
       </div>
-      <div v-else>
+      <div v-else class="note-editor-wrapper">
         <textarea 
           v-model="editingNote" 
           class="note-editor" 
@@ -88,20 +88,36 @@ watch(() => props.pdf, (newPdf) => {
 
 <style scoped>
 .pdf-note {
-  padding: 15px;
-  border-radius: 8px;
-  background-color: #f8f9fa;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .pdf-note h3 {
   margin-top: 0;
   color: #333;
+  flex-shrink: 0;
+}
+
+.note-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.note-display-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .note-display {
-  min-height: 100px;
+  flex: 1;
+  overflow: hidden;
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 .note-display pre {
@@ -112,25 +128,50 @@ watch(() => props.pdf, (newPdf) => {
   background-color: #fff;
   border-radius: 4px;
   border: 1px solid #eee;
-  max-height: 300px;
   overflow-y: auto;
+  flex: 1;
+}
+
+.note-display pre::-webkit-scrollbar {
+  width: 6px;
+}
+
+.note-display pre::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.note-display pre::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.note-display pre::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+.note-editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .note-editor {
   width: 100%;
-  min-height: 100px;
+  flex: 1;
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #ddd;
   font-family: inherit;
-  resize: vertical;
+  resize: none;
   box-sizing: border-box;
+  margin-bottom: 10px;
 }
 
 .note-actions {
-  margin-top: 10px;
   display: flex;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .edit-btn, .save-btn, .cancel-btn {
@@ -160,6 +201,10 @@ watch(() => props.pdf, (newPdf) => {
   color: #999;
   font-style: italic;
   text-align: center;
-  margin: 20px 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
 </style>

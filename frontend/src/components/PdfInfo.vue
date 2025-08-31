@@ -44,19 +44,22 @@ watch(() => props.pdf, (newPdf) => {
 
 <style scoped>
 .pdf-info {
-  padding: 15px;
-  border-radius: 8px;
-  background-color: #f8f9fa;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .pdf-info h3 {
   margin-top: 0;
   color: #333;
+  flex-shrink: 0;
 }
 
 .info-content {
-  min-height: 100px;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .info-content pre {
@@ -67,8 +70,26 @@ watch(() => props.pdf, (newPdf) => {
   background-color: #fff;
   border-radius: 4px;
   border: 1px solid #eee;
-  max-height: 300px;
   overflow-y: auto;
+  flex: 1;
+}
+
+.info-content pre::-webkit-scrollbar {
+  width: 6px;
+}
+
+.info-content pre::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.info-content pre::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.info-content pre::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 
 .no-info {
@@ -76,5 +97,9 @@ watch(() => props.pdf, (newPdf) => {
   font-style: italic;
   text-align: center;
   margin: 20px 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
