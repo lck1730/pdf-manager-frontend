@@ -50,23 +50,6 @@ export const pdfService = {
     return apiClient.put(`/pdf-edit/table/${tableId}/footnote`, { footnote })
   },
 
-  // 删除标签
-  deleteTag(pdfId, tag) {
-    return apiClient.delete('/pdf-delete/tag', {
-      params: { pdfId, tag }
-    })
-  },
-
-  // 添加标签
-  addTag(pdfId, tag) {
-    return apiClient.post('/tags/add', { pdfId, tag })
-  },
-
-  // 根据PDF ID获取标签
-  getTagsByPdfId(pdfId) {
-    return apiClient.get(`/tags/by-pdf/${pdfId}`)
-  },
-
   // 上传ZIP文件
   uploadZipFiles(files) {
     const formData = new FormData()
@@ -81,5 +64,10 @@ export const pdfService = {
   // 删除PDF及其相关数据
   deletePdfAndRelatedData(pdfId) {
     return apiClient.delete(`/pdf-delete/pdf/${pdfId}`)
+  },
+
+  // 根据图片名称删除图片及其文件
+  deleteImageAndFile(imageName) {
+    return apiClient.delete(`/pdf-delete/image/${imageName}`)
   }
 }

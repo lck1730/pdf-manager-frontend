@@ -1,23 +1,29 @@
 <template>
-  <div class="pdf-note section">
-    <h3>PDF备注</h3>
-    <div class="note-content">
-      <div v-if="!isEditing" class="note-display-wrapper">
-        <div class="note-display">
-          <pre v-if="note">{{ note }}</pre>
-          <p v-else class="no-note">暂无备注</p>
-        </div>
-        <button class="edit-btn" @click="startEdit">编辑</button>
-      </div>
-      <div v-else class="note-editor-wrapper">
-        <textarea 
-          v-model="editingNote" 
-          class="note-editor" 
-          placeholder="请输入备注内容"
-        ></textarea>
-        <div class="note-actions">
-          <button class="save-btn" @click="saveNote">保存</button>
-          <button class="cancel-btn" @click="cancelEdit">取消</button>
+  <div class="pdf-note-container">
+    <div class="pdf-note section">
+      <h3>雅雅🐷的笔记~</h3>
+      <div class="note-content">
+        <div v-if="loading" class="loading">加载中...</div>
+        <div v-else-if="error" class="error">加载失败: {{ error }}</div>
+        <div v-else>
+          <div v-if="!isEditing" class="note-display-wrapper">
+            <div class="note-display">
+              <pre v-if="note">{{ note }}</pre>
+              <p v-else class="no-note">暂无备注</p>
+            </div>
+            <button class="edit-btn" @click="startEdit">编辑</button>
+          </div>
+          <div v-else class="note-editor-wrapper">
+            <textarea
+                v-model="editingNote"
+                class="note-editor"
+                placeholder="请输入备注内容"
+            ></textarea>
+            <div class="note-actions">
+              <button class="save-btn" @click="saveNote">保存</button>
+              <button class="cancel-btn" @click="cancelEdit">取消</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -38,15 +44,29 @@ const props = defineProps({
 const note = ref('')
 const isEditing = ref(false)
 const editingNote = ref('')
+const loading = ref(false)
+const error = ref('')
 
 // 获取PDF备注
 const fetchPdfNote = async (pdfId) => {
+  loading.value = true
+  error.value = ''
+
   try {
     const response = await pdfService.getPdfInfoAndNote(pdfId)
-    note.value = response.data.note || ''
-  } catch (error) {
-    console.error('获取PDF备注失败:', error)
+    // 根据你的说明，响应数据是 ["info内容", "note内容"] 的数组
+    // 我们只需要第二个元素作为note
+    if (Array.isArray(response.data) && response.data.length >= 2) {
+      note.value = response.data[1] || ''
+    } else {
+      note.value = ''
+    }
+  } catch (err) {
+    console.error('获取PDF备注失败:', err)
+    error.value = err.message || '未知错误'
     note.value = ''
+  } finally {
+    loading.value = false
   }
 }
 
@@ -59,7 +79,7 @@ const startEdit = () => {
 // 保存备注
 const saveNote = async () => {
   if (!props.pdf) return
-  
+
   try {
     await pdfService.updatePdfNote(props.pdf.id, editingNote.value)
     note.value = editingNote.value
@@ -82,15 +102,26 @@ watch(() => props.pdf, (newPdf) => {
     fetchPdfNote(newPdf.id)
   } else {
     note.value = ''
+    loading.value = false
+    error.value = ''
   }
 }, { immediate: true })
 </script>
 
 <style scoped>
+.pdf-note-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
 .pdf-note {
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .pdf-note h3 {
@@ -104,6 +135,18 @@ watch(() => props.pdf, (newPdf) => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.loading, .error {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  font-size: 16px;
+}
+
+.error {
+  color: #f56c6c;
 }
 
 .note-display-wrapper {

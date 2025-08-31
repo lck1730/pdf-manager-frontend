@@ -4,7 +4,7 @@
     <main class="pdf-content">
       <iframe v-if="pdfUrl" :src="pdfUrl" class="pdf-iframe" />
       <p v-else-if="loading" class="loading">加载中…</p>
-      <p v-else-if="loadError" style="color:red">{{ errorMessage }}</p>
+      <p v-else-if="loadError" style="color:pink">{{ errorMessage }}</p>
       <div v-else class="pdf-placeholder">请选择 PDF</div>
     </main>
   </div>
