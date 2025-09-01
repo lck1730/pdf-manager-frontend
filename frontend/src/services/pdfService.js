@@ -69,5 +69,36 @@ export const pdfService = {
   // 根据图片名称删除图片及其文件
   deleteImageAndFile(imageName) {
     return apiClient.delete(`/pdf-delete/image/${imageName}`)
+  },
+
+  // 以下是新增的PDF信息提取和摘要接口
+  // 获取所有未提取信息的PDF文档
+  getUnextractedPdfDocuments() {
+    return apiClient.get('/pdf-info/unextracted')
+  },
+
+  // 提取指定PDF文档的信息
+  extractPdfInfo(pdfId) {
+    return apiClient.post(`/pdf-info/extract/${pdfId}`)
+  },
+
+  // 提取所有未处理PDF文档的信息
+  extractAllPdfInfo() {
+    return apiClient.post('/pdf-info/extract-all')
+  },
+
+  // 获取所有未总结的PDF文档
+  getUnsummarizedPdfDocuments() {
+    return apiClient.get('/pdf-info/unsummarized')
+  },
+
+  // 为指定PDF生成摘要
+  summarizePdf(pdfId) {
+    return apiClient.post(`/pdf-info/summarize/${pdfId}`)
+  },
+
+  // 为所有未总结的PDF生成摘要
+  summarizeAllPdf() {
+    return apiClient.post('/pdf-info/summarize-all')
   }
 }

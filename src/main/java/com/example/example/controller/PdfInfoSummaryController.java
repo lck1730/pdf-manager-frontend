@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/pdf-info")
+@CrossOrigin(origins = "*") // 添加这个注解
 public class PdfInfoSummaryController {
 
     private static final Logger logger = LoggerFactory.getLogger(PdfInfoSummaryController.class);

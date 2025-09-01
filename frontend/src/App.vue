@@ -20,8 +20,8 @@ const {
 
 const selectedPdfComputed = computed(() => selectedPdf.value)
 
-// 添加视图模式切换状态
-const viewMode = ref('pdf') // 'pdf'、'images' 或 'tables'
+// 添加视图模式切换状态，默认为 'tables'
+const viewMode = ref('tables') // 'pdf'、'images' 或 'tables'
 
 // 切换视图模式
 const toggleViewMode = (mode) => {
@@ -45,13 +45,13 @@ onMounted(() => {
       <!-- Tag区域 -->
       <TagFilter />
 
-      <!-- 视图切换按钮 -->
+      <!-- 视图切换按钮，调整顺序为 tables、images、pdf -->
       <div class="view-toggle">
         <button
-            :class="{ active: viewMode === 'pdf' }"
-            @click="toggleViewMode('pdf')"
+            :class="{ active: viewMode === 'tables' }"
+            @click="toggleViewMode('tables')"
         >
-          PDF
+          Tables
         </button>
         <button
             :class="{ active: viewMode === 'images' }"
@@ -60,10 +60,10 @@ onMounted(() => {
           Images
         </button>
         <button
-            :class="{ active: viewMode === 'tables' }"
-            @click="toggleViewMode('tables')"
+            :class="{ active: viewMode === 'pdf' }"
+            @click="toggleViewMode('pdf')"
         >
-          Tables
+          PDF
         </button>
       </div>
 
@@ -93,10 +93,10 @@ onMounted(() => {
           <PdfNote :pdf="selectedPdfComputed" />
         </div>
 
-        <!-- 右侧区域根据视图模式切换 -->
-        <template v-if="viewMode === 'pdf'">
+        <!-- 右侧区域根据视图模式切换，调整顺序 -->
+        <template v-if="viewMode === 'tables'">
           <div class="card card-view">
-            <PdfViewer :pdf="selectedPdfComputed" />
+            <TablesViewer :pdf="selectedPdfComputed" />
           </div>
         </template>
 
@@ -106,17 +106,17 @@ onMounted(() => {
           </div>
         </template>
 
-        <template v-else-if="viewMode === 'tables'">
+        <template v-else-if="viewMode === 'pdf'">
           <div class="card card-view">
-            <TablesViewer :pdf="selectedPdfComputed" />
+            <PdfViewer :pdf="selectedPdfComputed" />
           </div>
         </template>
       </div>
       <div v-else class="placeholder">
         <div class="welcome-message">
           <div class="welcome-icon">📚</div>
-          <h2>欢迎使用PDF管理系统</h2>
-          <p>请选择左侧的PDF文档进行查看或上传新的ZIP压缩包</p>
+          <h2>欢迎鸭鸭🐷使用PDF管理系统</h2>
+          <p>请猪猪🐷选择左侧的PDF文档进行查看或上传新的压缩包哦~</p>
         </div>
       </div>
     </div>

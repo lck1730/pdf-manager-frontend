@@ -1,6 +1,5 @@
 <template>
   <div class="tag-section section">
-    <h3>标签筛选</h3>
     <div class="tag-list">
       <span
           class="tag-item"
