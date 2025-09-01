@@ -1,30 +1,30 @@
 <template>
   <div class="pdf-list-section section">
     <div class="search-container">
-      <input 
-        v-model="searchQuery" 
-        type="text" 
-        placeholder="搜索PDF文件..." 
-        class="search-input"
-        @input="handleSearch"
+      <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="搜索PDF文件..."
+          class="search-input"
+          @input="handleSearch"
       />
     </div>
     <div class="pdf-list">
-      <div 
-        v-for="(pdf, index) in filteredPdfList" 
-        :key="index" 
-        class="pdf-item"
-        :class="{ selected: selectedPdf && selectedPdf.id === pdf.id }"
-        @click="selectPdf(pdf)"
+      <div
+          v-for="(pdf, index) in filteredPdfList"
+          :key="pdf.id || index"
+          class="pdf-item"
+          :class="{ selected: selectedPdf && selectedPdf.id === pdf.id }"
+          @click="selectPdf(pdf)"
       >
         <div class="pdf-icon">📄</div>
         <div class="pdf-info">
-          <div class="pdf-name">{{ pdf.name }}</div>
+          <div class="pdf-name">{{ pdf.filename || '未知文件' }}</div>
           <div class="pdf-tags">
-            <span 
-              v-for="tag in pdf.tags" 
-              :key="tag" 
-              class="pdf-tag"
+            <span
+                v-for="tag in pdf.tags"
+                :key="tag"
+                class="pdf-tag"
             >
               {{ tag }}
             </span>
@@ -58,19 +58,22 @@ export default {
       if (!Array.isArray(this.pdfList) || this.pdfList.length === 0) {
         return []
       }
-      
-      // 处理二维数组格式的数据
+
+      // 直接返回PDF对象数组，不再处理二维数组（因为usePdfManager已经处理过了）
       return this.pdfList.map(item => {
-        if (Array.isArray(item) && item.length >= 2) {
+        // 确保返回的对象有正确的字段
+        if (item && typeof item === 'object') {
           return {
-            id: item[0],
-            name: item[1],
-            tags: []
+            id: item.id,
+            filename: item.filename || '未知文件',
+            tags: item.tags || [],
+            ...item // 保留其他属性
           }
         }
+        // 其他情况返回默认对象
         return {
           id: null,
-          name: '',
+          filename: '未知文件',
           tags: []
         }
       })
@@ -79,10 +82,10 @@ export default {
       if (!this.searchQuery) {
         return this.processedPdfList
       }
-      
+
       const query = this.searchQuery.toLowerCase()
-      return this.processedPdfList.filter(pdf => 
-        pdf.name.toLowerCase().includes(query)
+      return this.processedPdfList.filter(pdf =>
+          (pdf.filename || '').toLowerCase().includes(query)
       )
     }
   },

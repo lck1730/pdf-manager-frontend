@@ -27,14 +27,16 @@ import { ref, onMounted } from 'vue'
 import { tagService } from '@/services/tagService'
 import { usePdfManager } from '@/composables/usePdfManager'
 
-const { fetchPdfList, setFilteredPdfList } = usePdfManager()
+const { fetchPdfList, setFilteredPdfList, getDebugInfo } = usePdfManager()
 const allTags = ref([])
 const selectedTags = ref([])
 
 // 获取所有标签
 const fetchAllTags = async () => {
   try {
+    console.log('正在获取所有标签...')
     const response = await tagService.getAllTags()
+    console.log('获取所有标签成功:', response)
     allTags.value = response.data || []
   } catch (error) {
     console.error('获取标签列表失败:', error)
@@ -44,19 +46,22 @@ const fetchAllTags = async () => {
 // 选择全部标签
 const selectAll = () => {
   selectedTags.value = []
-  // 获取所有PDF列表（不筛选）
-  fetchPdfList('yaya')
+  console.log('选择全部标签')
+  setFilteredPdfList(null) // 传入null表示显示全部
 }
 
 // 切换标签选择状态
 const toggleTag = (tag) => {
+  console.log('切换标签:', tag)
   const index = selectedTags.value.indexOf(tag)
   if (index > -1) {
     // 如果标签已选中，则取消选中
     selectedTags.value.splice(index, 1)
+    console.log('取消选中标签:', tag)
   } else {
     // 如果标签未选中，则选中该标签
     selectedTags.value.push(tag)
+    console.log('选中标签:', tag)
   }
 
   // 根据选中的标签筛选PDF
@@ -66,37 +71,48 @@ const toggleTag = (tag) => {
 // 根据选中的标签筛选PDF
 const filterPdfsByTags = async () => {
   try {
+    console.log('开始筛选PDF...')
     if (selectedTags.value.length === 0) {
-      // 如果没有选中任何标签，获取所有PDF
-      fetchPdfList('yaya')
+      // 如果没有选中任何标签，显示所有PDF
+      console.log('没有选中任何标签，显示所有PDF')
+      setFilteredPdfList(null)
     } else {
       // 根据选中的标签筛选PDF
+      console.log('根据标签筛选PDF:', selectedTags.value)
       const response = await tagService.searchByTags(selectedTags.value)
 
-      // 假设返回的是符合标签条件的PDF ID列表
-      // 需要根据实际返回的数据结构调整
-      const pdfIds = response.data || []
+      // 检查API响应
+      console.log('API response:', response)
 
-      // 使用这些ID获取对应的PDF信息
-      // 这里假设有一个方法可以根据PDF ID列表获取PDF列表
-      // 如果没有这个方法，可能需要在后端直接返回完整的PDF信息
-      if (pdfIds.length > 0) {
-        // 调用父组件的方法来设置过滤后的PDF列表
+      // 根据后端实际返回的数据结构调整
+      if (response.data && Array.isArray(response.data)) {
+        // 提取PDF ID列表
+        const pdfIds = response.data.map(item => item.pdfId || item.id)
+        console.log('提取到的PDF ID列表:', pdfIds)
+
+        // 调试信息
+        console.log('筛选前的调试信息:', getDebugInfo())
+
         setFilteredPdfList(pdfIds)
+
+        // 调试信息
+        console.log('筛选后的调试信息:', getDebugInfo())
       } else {
         // 如果没有找到匹配的PDF，清空列表
+        console.log('没有找到匹配的PDF，清空列表')
         setFilteredPdfList([])
       }
     }
   } catch (error) {
     console.error('筛选PDF失败:', error)
     // 如果筛选失败，显示所有PDF
-    fetchPdfList('yaya')
+    setFilteredPdfList(null)
   }
 }
 
 // 组件挂载时获取所有标签
 onMounted(() => {
+  console.log('组件挂载，开始获取所有标签...')
   fetchAllTags()
 })
 

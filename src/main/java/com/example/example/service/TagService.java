@@ -1,9 +1,13 @@
 package com.example.example.service;
 
+import com.example.example.controller.TagManagementController;
 import com.example.example.entity.Tag;
 import com.example.example.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +19,7 @@ import java.util.Optional;
 public class TagService {
     
     private final TagRepository tagRepository;
-    
+    private static final Logger log = LoggerFactory.getLogger(TagService.class);
     @Autowired
     public TagService(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
@@ -56,8 +60,20 @@ public class TagService {
      * @param pdfId PDF ID
      * @param tag 标签
      */
+    @Transactional
     public void deleteByPdfIdAndTag(String pdfId, String tag) {
-        tagRepository.deleteByPdfIdAndTag(pdfId, tag);
+        try {
+            // 添加参数校验
+            if (pdfId == null || pdfId.trim().isEmpty() ||
+                    tag == null || tag.trim().isEmpty()) {
+                throw new IllegalArgumentException("PDF ID和标签不能为空");
+            }
+
+            tagRepository.deleteByPdfIdAndTag(pdfId, tag);
+        } catch (Exception e) {
+            log.error("删除标签失败，pdfId: {}, tag: {}", pdfId, tag, e);
+            throw new RuntimeException("删除标签失败：" + e.getMessage(), e);
+        }
     }
     
     /**

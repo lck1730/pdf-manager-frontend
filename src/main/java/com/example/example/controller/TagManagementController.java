@@ -5,6 +5,8 @@ import com.example.example.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 public class TagManagementController {
 
     private final TagService tagService;
-
+    private static final Logger log = LoggerFactory.getLogger(TagManagementController.class);
     @Autowired
     public TagManagementController(TagService tagService) {
         this.tagService = tagService;
@@ -64,8 +66,22 @@ public class TagManagementController {
      */
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteTag(@RequestParam String pdfId, @RequestParam String tag) {
-        tagService.deleteByPdfIdAndTag(pdfId, tag);
-        return ResponseEntity.ok("标签删除成功");
+        try {
+            // 添加参数校验
+            if (pdfId == null || pdfId.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("PDF ID不能为空");
+            }
+            if (tag == null || tag.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("标签不能为空");
+            }
+
+            tagService.deleteByPdfIdAndTag(pdfId, tag);
+            return ResponseEntity.ok("标签删除成功");
+        } catch (Exception e) {
+            // 记录详细错误日志
+            log.error("删除标签失败，pdfId: {}, tag: {}", pdfId, tag, e);
+            return ResponseEntity.status(500).body("删除标签失败：" + e.getMessage());
+        }
     }
     
     /**
@@ -77,6 +93,17 @@ public class TagManagementController {
     @GetMapping("/by-pdf/{pdfId}")
     public ResponseEntity<List<Tag>> getTagsByPdfId(@PathVariable String pdfId) {
         List<Tag> tags = tagService.findByPdfId(pdfId);
+        return ResponseEntity.ok(tags);
+    }
+    
+    /**
+     * 获取所有不重复的标签
+     *
+     * @return 标签列表
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<String>> getAllTags() {
+        List<String> tags = tagService.findAllTags();
         return ResponseEntity.ok(tags);
     }
 }
