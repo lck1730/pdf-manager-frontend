@@ -33,5 +33,9 @@ export const tagService = {
     return apiClient.delete('/pdf-delete/tag', {
       params: { pdfId, tag }
     })
+  },
+  // 获取所有不重复的标签
+  getAllTags() {
+    return apiClient.get('/tags/all')
   }
 }

@@ -91,7 +91,7 @@ watch(() => props.pdf, (newPdf) => {
 .info-content {
   flex: 1;
   overflow-y: auto;
-  display: block;
+  text-align: left; /* 确保文本左对齐 */
 }
 
 .loading, .error {
@@ -100,6 +100,7 @@ watch(() => props.pdf, (newPdf) => {
   justify-content: flex-start;
   height: 100%;
   font-size: 16px;
+  text-align: left;
 }
 
 .error {
@@ -107,59 +108,47 @@ watch(() => props.pdf, (newPdf) => {
 }
 
 .info-details {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: block;
+  text-align: left;
 }
 
 .info-item {
-  display: flex;
-  flex-direction: column;
+  display: block;
   padding: 10px;
   background-color: #f8f9fa;
   border-radius: 6px;
   border: 1px solid #e9ecef;
+  text-align: left;
 }
 
 .no-info {
   color: #6c757d;
   font-style: italic;
-  text-align: center;
+  text-align: left;
   padding: 20px;
 }
 
 .markdown-content {
   line-height: 1.6;
+  text-align: left;
 }
 
-.markdown-content :deep(h1) {
-  font-size: 2em;
-  margin: 0.67em 0;
-  font-weight: bold;
-}
-
-.markdown-content :deep(h2) {
-  font-size: 1.5em;
-  margin: 0.83em 0;
-  font-weight: bold;
-}
-
-.markdown-content :deep(h3) {
-  font-size: 1.17em;
-  margin: 1em 0;
-  font-weight: bold;
+.markdown-content :deep(h1),
+.markdown-content :deep(h2),
+.markdown-content :deep(h3),
+.markdown-content :deep(h4),
+.markdown-content :deep(h5),
+.markdown-content :deep(h6) {
+  text-align: left;
 }
 
 .markdown-content :deep(p) {
+  text-align: left;
   margin: 1em 0;
 }
 
-.markdown-content :deep(strong) {
-  font-weight: bold;
-}
-
-.markdown-content :deep(em) {
-  font-style: italic;
+.markdown-content :deep(*) {
+  text-align: left;
 }
 
 .markdown-content :deep(ul),
@@ -194,6 +183,7 @@ watch(() => props.pdf, (newPdf) => {
   border-radius: 4px;
   overflow-x: auto;
   margin: 1em 0;
+  text-align: left;
 }
 
 .markdown-content :deep(pre code) {
@@ -206,6 +196,7 @@ watch(() => props.pdf, (newPdf) => {
   padding-left: 16px;
   margin: 1em 0;
   color: #6c757d;
+  text-align: left;
 }
 
 .info-content::-webkit-scrollbar {

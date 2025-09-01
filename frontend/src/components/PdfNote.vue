@@ -128,6 +128,7 @@ watch(() => props.pdf, (newPdf) => {
   margin-top: 0;
   color: #333;
   flex-shrink: 0;
+  text-align: left;
 }
 
 .note-content {
@@ -135,6 +136,7 @@ watch(() => props.pdf, (newPdf) => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  text-align: left;
 }
 
 .loading, .error {
@@ -143,6 +145,7 @@ watch(() => props.pdf, (newPdf) => {
   justify-content: flex-start;
   height: 100%;
   font-size: 16px;
+  text-align: left;
 }
 
 .error {
@@ -153,6 +156,7 @@ watch(() => props.pdf, (newPdf) => {
   display: flex;
   flex-direction: column;
   height: 100%;
+  text-align: left;
 }
 
 .note-display {
@@ -161,6 +165,7 @@ watch(() => props.pdf, (newPdf) => {
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 .note-display pre {
@@ -173,6 +178,7 @@ watch(() => props.pdf, (newPdf) => {
   border: 1px solid #eee;
   overflow-y: auto;
   flex: 1;
+  text-align: left;
 }
 
 .note-display pre::-webkit-scrollbar {
@@ -197,6 +203,7 @@ watch(() => props.pdf, (newPdf) => {
   display: flex;
   flex-direction: column;
   height: 100%;
+  text-align: left;
 }
 
 .note-editor {
@@ -209,6 +216,7 @@ watch(() => props.pdf, (newPdf) => {
   resize: none;
   box-sizing: border-box;
   margin-bottom: 10px;
+  text-align: left;
 }
 
 .note-actions {
@@ -243,11 +251,12 @@ watch(() => props.pdf, (newPdf) => {
 .no-note {
   color: #999;
   font-style: italic;
-  text-align: center;
+  text-align: left; /* 修改为左对齐 */
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* 修改为左对齐 */
   margin: 0;
+  padding: 20px;
 }
 </style>
