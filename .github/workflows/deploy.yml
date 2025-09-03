@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-          name: pdf-manager-frontend-dist  # 显式指定 artifact 名称，避免冲突
+          name: github-pages  # 修改为 github-pages，与 deploy-pages 期望的名称一致
 
   deploy:
     environment:
