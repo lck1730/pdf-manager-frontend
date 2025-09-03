@@ -13,5 +13,5 @@ export default defineConfig({
       '@': resolve(__dirname, 'src')
     }
   },
-  base: './'
+  base: '/pdf-manager-frontend/'
 })
