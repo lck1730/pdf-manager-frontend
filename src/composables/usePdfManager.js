@@ -4,10 +4,12 @@ import { pdfService } from '@/services/pdfService'
 
 // 创建单例状态
 const state = {
-  allPdfList: ref([]),     // 存储所有PDF（统一格式）
+  allPdfList: ref([]),     // 孙存储所有PDF（统一格式）
   filteredPdfIds: ref([]), // 存储筛选后的PDF ID
   selectedPdf: ref(null),
-  isFiltered: ref(false)
+  isFiltered: ref(false),
+  isUploading: ref(false),      // 添加上传状态
+  uploadProgress: ref(0)        // 添加上传进度
 }
 
 // 创建一次性的函数定义  单例模式？
@@ -103,6 +105,47 @@ const functions = {
     state.selectedPdf.value = pdf
   },
 
+  // 新增：处理ZIP文件上传
+  handleZipUpload: async (files) => {
+    if (!files || !files.length) {
+      console.warn('没有选择文件')
+      return
+    }
+
+    // 设置上传状态
+    state.isUploading.value = true
+    state.uploadProgress.value = 0
+
+    try {
+      console.log('开始上传ZIP文件:', files)
+      
+      // 调用后端API上传ZIP文件，带进度回调
+      const response = await pdfService.uploadZipFiles(files, (progressEvent) => {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        state.uploadProgress.value = percentCompleted
+        console.log(`上传进度: ${percentCompleted}%`)
+      })
+      
+      console.log('上传成功:', response)
+      
+      // 上传成功后刷新PDF列表
+      // 这里假设用户名为'lcp'，实际应该从用户状态中获取
+      await functions.fetchPdfList('lcp')
+      
+      // 重置上传状态
+      state.isUploading.value = false
+      state.uploadProgress.value = 100
+      
+      return response
+    } catch (error) {
+      console.error('上传失败:', error)
+      // 重置上传状态
+      state.isUploading.value = false
+      state.uploadProgress.value = 0
+      throw error
+    }
+  },
+
   // 暴露一个方法来获取当前状态，用于调试
   getDebugInfo: () => {
     return {
@@ -155,6 +198,9 @@ export function usePdfManager() {
     selectedPdf: state.selectedPdf,
     setFilteredPdfList: functions.setFilteredPdfList,
     isFiltered: state.isFiltered,
-    getDebugInfo: functions.getDebugInfo
+    getDebugInfo: functions.getDebugInfo,
+    handleZipUpload: functions.handleZipUpload,
+    isUploading: state.isUploading,     // 导出上传状态
+    uploadProgress: state.uploadProgress // 导出上传进度
   }
 }

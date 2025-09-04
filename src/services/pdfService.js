@@ -51,13 +51,16 @@ export const pdfService = {
   },
 
   // 上传ZIP文件
-  uploadZipFiles(files) {
+  uploadZipFiles(files, onUploadProgress) {
     const formData = new FormData()
-    files.forEach(file => formData.append('files', file))
+    // 将FileList转换为数组
+    const fileArray = Array.from(files)
+    fileArray.forEach(file => formData.append('files', file))
     return apiClient.post('/files/upload-zip', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
-      }
+      },
+      onUploadProgress
     })
   },
 

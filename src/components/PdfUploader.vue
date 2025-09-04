@@ -52,8 +52,10 @@ const handleFileSelect = async (event) => {
     await handleZipUpload(files)
     // 上传成功后重置input
     event.target.value = ''
+    alert('ZIP文件上传成功!')
   } catch (error) {
     console.error('上传出错:', error)
+    alert('上传失败: ' + (error.message || '未知错误'))
     // 重置input
     event.target.value = ''
   }
