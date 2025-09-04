@@ -4,12 +4,13 @@ import { pdfService } from '@/services/pdfService'
 
 // 创建单例状态
 const state = {
-  allPdfList: ref([]),     // 孙存储所有PDF（统一格式）
+  allPdfList: ref([]),     // 存储所有PDF（统一格式）
   filteredPdfIds: ref([]), // 存储筛选后的PDF ID
   selectedPdf: ref(null),
   isFiltered: ref(false),
   isUploading: ref(false),      // 添加上传状态
-  uploadProgress: ref(0)        // 添加上传进度
+  uploadProgress: ref(0),       // 添加上传进度
+  currentUser: ref('yaya')      // 添加当前用户状态
 }
 
 // 创建一次性的函数定义  单例模式？
@@ -18,6 +19,11 @@ const functions = {
   fetchPdfList: async (username) => {
     try {
       console.log('正在获取PDF列表...')
+      // 更新当前用户
+      if (username) {
+        state.currentUser.value = username
+      }
+      
       const response = await pdfService.getPdfListByUsername(username)
       console.log('获取PDF列表成功:', response)
 
@@ -128,9 +134,8 @@ const functions = {
       
       console.log('上传成功:', response)
       
-      // 上传成功后刷新PDF列表
-      // 这里假设用户名为'lcp'，实际应该从用户状态中获取
-      await functions.fetchPdfList('lcp')
+      // 上传成功后刷新PDF列表，使用当前用户
+      await functions.fetchPdfList(state.currentUser.value)
       
       // 重置上传状态
       state.isUploading.value = false
@@ -201,6 +206,7 @@ export function usePdfManager() {
     getDebugInfo: functions.getDebugInfo,
     handleZipUpload: functions.handleZipUpload,
     isUploading: state.isUploading,     // 导出上传状态
-    uploadProgress: state.uploadProgress // 导出上传进度
+    uploadProgress: state.uploadProgress, // 导出上传进度
+    currentUser: state.currentUser      // 导出当前用户
   }
 }

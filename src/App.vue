@@ -18,6 +18,9 @@ const {
   selectedPdf
 } = usePdfManager()
 
+// 获取TagFilter组件的引用
+const tagFilterRef = ref(null)
+
 const selectedPdfComputed = computed(() => selectedPdf.value)
 
 // 添加视图模式切换状态，默认为 'tables'
@@ -26,6 +29,14 @@ const viewMode = ref('tables') // 'pdf'、'images' 或 'tables'
 // 切换视图模式
 const toggleViewMode = (mode) => {
   viewMode.value = mode
+}
+
+// 处理标签更新事件
+const handleTagsUpdated = () => {
+  // 刷新标签筛选器中的标签列表
+  if (tagFilterRef.value && typeof tagFilterRef.value.refreshTags === 'function') {
+    tagFilterRef.value.refreshTags()
+  }
 }
 
 // 页面加载时触发
@@ -43,7 +54,7 @@ onMounted(() => {
       <PdfUploader />
 
       <!-- Tag区域 -->
-      <TagFilter />
+      <TagFilter ref="tagFilterRef" />
 
       <!-- 视图切换按钮，调整顺序为 tables、images、pdf -->
       <div class="view-toggle">
@@ -80,7 +91,10 @@ onMounted(() => {
       <div v-if="selectedPdfComputed" class="three-cards-layout">
         <!-- 左上角卡片：宽40%，高10% -->
         <div class="card card-a">
-          <PdfTags :pdf="selectedPdfComputed" />
+          <PdfTags 
+            :pdf="selectedPdfComputed" 
+            @tags-updated="handleTagsUpdated"
+          />
         </div>
 
         <!-- 左中卡片：宽40%，高45% -->

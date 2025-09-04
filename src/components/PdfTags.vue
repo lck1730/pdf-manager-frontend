@@ -64,6 +64,9 @@ const props = defineProps({
   }
 })
 
+// 定义事件发射器，用于通知父组件标签列表已更新
+const emit = defineEmits(['tagsUpdated'])
+
 const tags = ref([])
 const newTag = ref('')
 const isAddingTag = ref(false)
@@ -127,6 +130,9 @@ const addTag = async () => {
     await tagService.createTag(tagData)
     tags.value.push(newTag.value.trim())
     hideAddTagInput()
+    
+    // 通知父组件标签已更新
+    emit('tagsUpdated')
   } catch (error) {
     console.error('添加标签失败:', error)
     alert('添加标签失败: ' + (error.message || '未知错误'))
@@ -160,6 +166,9 @@ const removeTag = async (tagToRemove) => {
     console.log('删除标签参数:', { pdfId, tag: tagToRemove })
     await tagService.deleteTag(pdfId, tagToRemove)
     tags.value = tags.value.filter(tag => tag !== tagToRemove)
+    
+    // 通知父组件标签已更新
+    emit('tagsUpdated')
   } catch (error) {
     console.error('删除标签失败:', error)
 
