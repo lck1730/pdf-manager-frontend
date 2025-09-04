@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // 创建axios实例
 const apiClient = axios.create({
-  baseURL: 'http://8.137.152.40:8080/api',
+  baseURL: 'https://8.137.152.40:8080/api',
   timeout: 10000
 })
 
