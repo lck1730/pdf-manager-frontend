@@ -1,64 +1,76 @@
-# Example Application
+# Frontend - Vue3 Project
 
-这是一个基于Spring Boot的简单Java项目，用于演示基础的Web应用开发结构和流程。
+这是基于 Vue3 + Vite 构建的前端项目，与后端 Spring Boot 项目分离开发。
 
 ## 项目结构
 
 ```
-.
-├── src/main/java               # 后端Java代码
-├── src/main/resources          # 后端资源配置
-├── frontend/                   # 前端Vue3项目
-├── target/                     # Maven构建输出
-└── start-with-frontend.bat     # 前后端联合启动脚本
+frontend/
+├── public/              # 静态资源目录
+├── src/                 # 源代码目录
+│   ├── assets/          # 静态资源（图片、样式等）
+│   ├── components/      # 组件目录
+│   ├── App.vue          # 根组件
+│   └── main.js          # 入口文件
+├── index.html           # HTML模板
+├── package.json         # 项目配置文件
+└── vite.config.js       # Vite配置文件
 ```
 
 ## 开发指南
 
-### 后端开发
+1. 安装依赖：
+   ```
+   npm install
+   ```
 
-1. 确保已安装JDK 17和Maven 3.5+
-2. 使用IntelliJ IDEA或其他IDE导入项目
-3. 运行`ExampleApplication.java`启动应用
+2. 启动开发服务器：
+   ```
+   npm run dev
+   ```
 
-或者使用命令行：
-```bash
-mvn spring-boot:run
-```
+3. 构建生产版本：
+   ```
+   npm run build
+   ```
 
-### 前端开发
+4. 预览生产构建：
+   ```
+   npm run preview
+   ```
 
-前端使用Vue3 + Vite构建，独立于后端开发：
+## 与后端交互
 
-1. 进入frontend目录
-2. 安装依赖：`npm install`
-3. 启动开发服务器：`npm run dev`
+前端开发服务器默认运行在 `http://localhost:5173`，后端 API 通过代理配置请求到后端服务。
 
-### 前后端联合开发
+开发时，需要确保后端服务正在运行。
 
-使用提供的脚本启动前后端服务：
-```bash
-start-with-frontend.bat
-```
+## PDF管理界面
 
-该脚本会同时启动：
-- MinIO服务（文件存储）
-- Spring Boot后端服务
-- Vue3前端开发服务器
+当前界面采用左右布局：
+- 左侧（1/4宽度）为管理面板，包含：
+  - 文件夹上传功能（对接后端 `/api/files/batch-upload-files` 接口）
+  - 标签筛选区域
+  - PDF文档列表（支持滚动）
+- 右侧（3/4宽度）为内容展示区，用于展示选中的PDF文档
 
-## API交互
+### 功能说明
 
-前端通过代理方式访问后端API，避免跨域问题。所有API请求都代理到后端服务。
+1. 文件夹上传：
+   - 点击"上传文件夹"按钮选择本地文件夹
+   - 自动将文件夹内容上传到后端
+   - 支持显示上传进度
 
-## 构建和部署
+2. 标签筛选：
+   - 点击不同标签可筛选PDF文档
+   - 当前为静态演示，后续将与后端数据对接
 
-### 后端构建
-```bash
-mvn clean package
-```
+3. PDF列表：
+   - 显示PDF文档列表
+   - 支持滚动查看更多文档
+   - 点击文档可在右侧区域查看详细内容
 
-### 前端构建
-```bash
-cd frontend
-npm run build
-```
+4. 内容展示：
+   - 点击左侧PDF列表项后，在右侧展示对应PDF内容
+   - 当前为静态展示，后续将集成PDF查看器
+5. 搜索功能：
