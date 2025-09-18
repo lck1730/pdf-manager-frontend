@@ -1,6 +1,8 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+
+createApp(App).use(router).mount('#app');
 
 // 添加全局样式确保应用占据整个屏幕
 const style = document.createElement('style')
@@ -14,5 +16,3 @@ style.innerHTML = `
   }
 `
 document.head.appendChild(style)
-
-createApp(App).mount('#app')
