@@ -56,10 +56,14 @@
 </template>
 
 <script>
-import apiClient from '../services/apiClient';
-
+import apiClient from '../services/api';
+import { useRouter } from 'vue-router'
 export default {
   name: 'Register',
+  setup() {
+    const router = useRouter()
+    return { router }
+  },
   data() {
     return {
       registerForm: {

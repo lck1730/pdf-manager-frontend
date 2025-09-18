@@ -1,40 +1,9 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import authService from '@/services/authService'
-import Login from '@/components/Login.vue'
-import MainApp from '@/components/MainApp.vue'
-import { useRoute } from 'vue-router'
-
-// 检查用户是否已认证
-const isAuthenticated = ref(false)
-const route = useRoute()
-
-// 更新认证状态的函数
-const updateAuthStatus = () => {
-  isAuthenticated.value = authService.isAuthenticated()
-}
-
-onMounted(() => {
-  updateAuthStatus()
-})
-
-// 监听路由变化以更新认证状态
-watch(
-  () => route.path,
-  () => {
-    updateAuthStatus()
-  }
-)
-
-// 监听localStorage变化以更新认证状态
-window.addEventListener('storage', updateAuthStatus)
 </script>
 
 <template>
   <div id="app">
-    <!-- 根据认证状态显示不同界面 -->
-    <Login v-if="!isAuthenticated" />
-    <MainApp v-else />
+    <router-view />
   </div>
 </template>
 

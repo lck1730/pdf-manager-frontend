@@ -5,30 +5,30 @@
       <form @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="username">用户名:</label>
-          <input 
-            type="text" 
-            id="username" 
-            v-model="loginForm.username" 
-            required
+          <input
+              type="text"
+              id="username"
+              v-model="loginForm.username"
+              required
           />
         </div>
-        
+
         <div class="form-group">
           <label for="password">密码:</label>
-          <input 
-            type="password" 
-            id="password" 
-            v-model="loginForm.password" 
-            required
+          <input
+              type="password"
+              id="password"
+              v-model="loginForm.password"
+              required
           />
         </div>
-        
+
         <div class="form-group">
           <button type="submit" :disabled="loading">
             {{ loading ? '登录中...' : '登录' }}
           </button>
         </div>
-        
+
         <div v-if="error" class="error-message">
           {{ error }}
         </div>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import apiClient from '../services/apiClient';
+import apiClient from '../services/api';
 import authService from '../services/authService';
 import { useRouter } from 'vue-router';
 
@@ -62,20 +62,20 @@ export default {
     async handleLogin() {
       this.loading = true;
       this.error = '';
-      
+
       try {
         const response = await apiClient.post('/api/auth/login', this.loginForm);
-        
+
         // 检查登录是否成功
         if (response.status === 200 && response.data.success) {
           const { accessToken, refreshToken } = response.data;
-          
+
           // 存储令牌
           authService.setAccessToken(accessToken);
           authService.setRefreshToken(refreshToken);
-          
-          // 跳转到主应用页面
-          window.location.href = '/pdf-manager-frontend/';
+
+          // 使用Vue Router跳转到主应用页面
+          this.router.push('/app');
         } else {
           // 登录失败，显示错误信息
           this.error = response.data.message || '登录失败';
@@ -124,7 +124,7 @@ input {
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  box-sizing: border-box;
+  font-size: 1rem;
 }
 
 button {
@@ -134,12 +134,12 @@ button {
   color: white;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
   font-size: 1rem;
+  cursor: pointer;
 }
 
 button:disabled {
-  background-color: #ccc;
+  background-color: #6c757d;
   cursor: not-allowed;
 }
 

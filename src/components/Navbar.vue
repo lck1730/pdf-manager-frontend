@@ -22,7 +22,7 @@
 
 <script>
 import authService from '../services/authService';
-import apiClient from '../services/apiClient';
+import apiClient from '../services/api';
 
 export default {
   name: 'Navbar',

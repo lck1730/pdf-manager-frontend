@@ -1,7 +1,7 @@
 // 文件路径: src/composables/usePdfManager.js
 import { ref, computed } from 'vue'
 import { pdfService } from '@/services/pdfService'
-
+import authService from '@/services/authService'
 // 创建单例状态
 const state = {
   allPdfList: ref([]),     // 存储所有PDF（统一格式）
@@ -10,7 +10,7 @@ const state = {
   isFiltered: ref(false),
   isUploading: ref(false),      // 添加上传状态
   uploadProgress: ref(0),       // 添加上传进度
-  currentUser: ref('yaya')      // 添加当前用户状态
+  currentUser: ref(null)      // 添加当前用户状态
 }
 
 // 创建一次性的函数定义  单例模式？
@@ -135,7 +135,16 @@ const functions = {
       console.log('上传成功:', response)
       
       // 上传成功后刷新PDF列表，使用当前用户
-      await functions.fetchPdfList(state.currentUser.value)
+      const token = authService.getAccessToken()
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]))
+          const currentUser = payload.sub
+          await functions.fetchPdfList(currentUser)
+        } catch (e) {
+          console.error('解析JWT令牌失败', e)
+        }
+      }
       
       // 重置上传状态
       state.isUploading.value = false

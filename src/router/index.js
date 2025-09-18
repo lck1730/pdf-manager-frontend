@@ -1,56 +1,53 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import authService from '../services/authService';
+// 文件路径: src/router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
+import MainApp from '@/components/MainApp.vue'
+import Login from '@/components/Login.vue'
+import Register from '@/components/Register.vue'
+import authService from '@/services/authService'
 
-// 动态导入组件
-const Login = () => import('../components/Login.vue');
-const Register = () => import('../components/Register.vue');
-const MainApp = () => import('../components/MainApp.vue');
-
-// 创建路由
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    redirect: '/app' // 默认重定向到/app
+    redirect: '/app'
   },
   {
     path: '/app',
-    name: 'App',
-    component: MainApp // 指向MainApp.vue组件
+    component: MainApp,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
-    name: 'Login',
-    component: Login
+    component: Login,
+    meta: { requiresAuth: false }
   },
   {
     path: '/register',
-    name: 'Register',
-    component: Register
+    component: Register,
+    meta: { requiresAuth: false }
   }
-];
+]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/pdf-manager-frontend/'),
   routes
-});
+})
 
-// 路由守卫
+// 优化后的路由守卫
 router.beforeEach((to, from, next) => {
-  // 检查目标路由是否需要认证
-  const requiresAuth = !['/login', '/register'].includes(to.path);
-  const isAuthenticated = authService.isAuthenticated();
-  
-  if (requiresAuth && !isAuthenticated) {
-    // 需要认证但未认证，重定向到登录页
-    next('/login');
-  } else if ((to.path === '/login' || to.path === '/register') && isAuthenticated) {
-    // 已认证用户访问登录或注册页面，重定向到/app
-    next('/app');
-  } else {
-    // 其他情况允许访问
-    next();
-  }
-});
+  const isAuthenticated = authService.isAuthenticated()
 
-export default router;
+  // 如果目标页面需要认证但用户未认证
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login')  // 重定向到登录页
+  }
+  // 如果目标页面不需要认证但用户已认证
+  else if (!to.meta.requiresAuth && isAuthenticated) {
+    next('/app')    // 重定向到主应用
+  }
+  // 其他情况正常跳转
+  else {
+    next()
+  }
+})
+
+export default router

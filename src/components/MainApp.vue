@@ -55,8 +55,24 @@ const handleLogout = () => {
 
 // 页面加载时触发
 onMounted(() => {
-  const currentUser = 'yaya'
-  fetchPdfList(currentUser) // 调用获取PDF列表的方法
+  // 从JWT令牌中获取当前用户
+  const token = authService.getAccessToken();
+  if (token) {
+    try {
+      // 解析JWT令牌获取用户名
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const currentUser = payload.sub;
+      fetchPdfList(currentUser); // 调用获取PDF列表的方法
+    } catch (e) {
+      console.error('解析JWT令牌失败', e);
+      // 如果解析失败，使用默认用户（仅用于开发环境）
+      fetchPdfList('yaya');
+    }
+  } else {
+    console.error('未找到访问令牌');
+    // 如果没有令牌，重定向到登录页面
+    router.push('/login');
+  }
 })
 </script>
 
