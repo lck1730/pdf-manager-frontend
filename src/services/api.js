@@ -3,7 +3,8 @@ import authService from './authService'
 
 // 创建axios实例
 const apiClient = axios.create({
-    baseURL: 'http://8.137.152.40:8080', // 可以根据需要修改为远程地址
+    baseURL: 'https://8.137.152.40', // 可以根据需要修改为远程地址
+    // baseURL:'http://localhost:8080'
     timeout: 10000
 })
 
