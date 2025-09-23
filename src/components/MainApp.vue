@@ -12,6 +12,7 @@ import TablesViewer from '@/components/TablesViewer.vue'
 import ImagesViewer from '@/components/ImagesViewer.vue'
 import authService from '@/services/authService'
 import { useRouter } from 'vue-router'
+import FloatingChat from "@/components/FloatingChat.vue";
 
 const router = useRouter()
 
@@ -169,6 +170,9 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- 悬浮球 -->
+    <FloatingChat />
   </div>
 </template>
 
