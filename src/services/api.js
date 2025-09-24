@@ -3,8 +3,8 @@ import authService from './authService'
 
 // 创建axios实例
 const apiClient = axios.create({
-    baseURL: 'https://8.137.152.40', // 可以根据需要修改为远程地址
-    // baseURL:'http://localhost:8080'
+    // baseURL: 'https://8.137.152.40',
+    baseURL:'http://localhost:8080',
     timeout: 10000
 })
 
@@ -38,7 +38,7 @@ apiClient.interceptors.response.use(
             const refreshToken = authService.getRefreshToken()
             if (refreshToken) {
                 try {
-                    const response = await axios.post('http://localhost:8080/api/auth/refresh', { refreshToken })
+                    const response = await axios.post(`${apiClient.defaults.baseURL}/api/auth/refresh`, { refreshToken })
                     const { accessToken } = response.data
 
                     // 存储新的访问令牌

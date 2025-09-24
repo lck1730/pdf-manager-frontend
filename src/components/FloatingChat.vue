@@ -55,6 +55,7 @@
                   <button @click.stop="deleteSession(session.sessionId)" class="btn-icon">🗑️</button>
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -83,14 +84,11 @@
         <!-- 聊天区域 -->
         <div class="messages-area" ref="messagesArea">
           <div
-              v-for="message in messages"
-              :key="message.id"
-              :class="['message', message.role.toLowerCase()]"
+              v-for="(message, index) in messages"
+              :key="index"
+              :class="['message', message.role]"
           >
             <div class="message-content">
-              <div class="message-sender">
-                {{ message.role === 'USER' ? '你' : 'AI助手' }}
-              </div>
               <div class="message-text">{{ message.content }}</div>
             </div>
           </div>
@@ -168,7 +166,8 @@ const sessions = ref([])
 const currentSessionId = ref('')
 const embeddedPdfs = ref([])
 const selectedPdfIds = ref([])
-
+const selectedSession = ref(null)
+const chatHistory = ref([])
 // 打开聊天框
 const openChat = () => {
   isChatOpen.value = true
@@ -226,22 +225,35 @@ const createNewSession = async () => {
   }
 }
 
-// 选择会话
+// 获取聊天历史
 const selectSession = async (sessionId) => {
-  currentSessionId.value = sessionId
   try {
-    const response = await ragService.getChatHistory(sessionId)
-    if (response.data.success) {
-      messages.value = response.data.history || []
-      nextTick(() => {
-        scrollToBottom()
-      })
+    const response = await ragService.getChatHistory(sessionId);
+    console.log('获取聊天历史响应:', response.data); // 添加调试日志
+
+    if (response.data && response.data.success && response.data.history) {
+      // 正确映射消息格式
+      messages.value = response.data.history.map(msg => ({
+        role: msg.messageType ? msg.messageType.toLowerCase() : 'unknown',
+        content: msg.text || '',
+        timestamp: new Date() // 可以根据需要添加时间戳
+      }));
+      console.log('处理后的消息列表:', messages.value); // 添加调试日志
+      currentSessionId.value = sessionId;
+    } else {
+      messages.value = [];
+      currentSessionId.value = sessionId;
     }
+    scrollToBottom();
   } catch (error) {
-    console.error('获取聊天历史失败:', error)
-    messages.value = []
+    console.error('获取聊天历史失败:', error);
+    messages.value = [];
+    currentSessionId.value = sessionId;
   }
-}
+};
+
+
+
 
 // 重命名会话
 const renameSession = async (session) => {
@@ -274,58 +286,59 @@ const deleteSession = async (sessionId) => {
 
 // 发送消息
 const sendMessage = async () => {
-  if (!userInput.value.trim() || !currentSessionId.value) {
-    if (!currentSessionId.value) {
-      alert('请先创建或选择一个会话')
-    }
-    return
-  }
-
-  const message = {
-    id: Date.now(),
-    role: 'USER',
-    content: userInput.value.trim()
-  }
-
-  messages.value.push(message)
-  const userQuestion = userInput.value.trim()
-  userInput.value = ''
-
-  nextTick(() => {
-    scrollToBottom()
-  })
+  if (!userInput.value.trim() || !currentSessionId.value) return;
 
   try {
+    // 添加用户消息到本地显示
+    const userMessage = {
+      role: 'user',
+      content: userInput.value
+    };
+    messages.value.push(userMessage);
+
+    // 保存当前输入并清空输入框
+    const query = userInput.value;
+    userInput.value = '';
+
+    // 滚动到底部
+    scrollToBottom();
+
+    // 调用后端API
     const response = await ragService.ragChat({
-      query: userQuestion,
+      query: query,
       pdfIds: selectedPdfIds.value,
       sessionId: currentSessionId.value
-    })
+    });
 
-    if (response.data.success) {
-      const aiMessage = {
-        id: Date.now() + 1,
-        role: 'ASSISTANT',
-        content: response.data.response
-      }
-      messages.value.push(aiMessage)
-      nextTick(() => {
-        scrollToBottom()
-      })
-    }
+    // 添加AI回复到本地显示
+    const aiMessage = {
+      role: 'assistant',
+      content: response.data.data || response.data || ''
+    };
+    messages.value.push(aiMessage);
+
+    // 滚动到底部
+    scrollToBottom();
   } catch (error) {
-    console.error('发送消息失败:', error)
+    console.error('发送消息失败:', error);
+    // 移除之前添加的用户消息（因为发送失败了）
+    messages.value.pop();
+
+    // 添加错误提示
     const errorMessage = {
-      id: Date.now() + 1,
-      role: 'ASSISTANT',
-      content: '抱歉，我无法回答你的问题，请稍后重试。'
-    }
-    messages.value.push(errorMessage)
-    nextTick(() => {
-      scrollToBottom()
-    })
+      role: 'error',
+      content: '消息发送失败: ' + (error.response?.data?.message || error.message)
+    };
+    messages.value.push(errorMessage);
+    scrollToBottom();
   }
-}
+};
+
+
+
+
+
+
 
 // 移除PDF向量化
 const removePdfFromVector = async (pdfId) => {
@@ -342,18 +355,24 @@ const removePdfFromVector = async (pdfId) => {
 
 // 获取会话列表
 const fetchSessions = async () => {
+  console.log('开始获取会话列表...');
   try {
     const response = await ragService.getUserSessions()
+    console.log('获取会话列表响应:', response);
     if (response.data.success) {
-      sessions.value = response.data.sessions.map(sessionId => ({
-        sessionId,
-        sessionName: `会话 ${sessionId.substring(0, 8)}`
+      console.log('获取会话列表成功，共找到', response.data.sessions.length, '个会话');
+      // 将ChatSession对象转换为前端需要的格式
+      sessions.value = response.data.sessions.map(session => ({
+        sessionId: session.sessionId,
+        sessionName: session.sessionName || `会话 ${session.sessionId.substring(0, 8)}`
       }))
     }
   } catch (error) {
     console.error('获取会话列表失败:', error)
   }
 }
+
+
 
 // 获取已向量化的PDF列表
 const fetchEmbeddedPdfs = async () => {
@@ -511,6 +530,7 @@ onMounted(async () => {
 .session-item.active {
   background: #e3f2fd;
   border-color: #667eea;
+  font-weight: bold;
 }
 
 .session-name {
