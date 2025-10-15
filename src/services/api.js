@@ -4,7 +4,9 @@ import authService from './authService'
 // 创建axios实例
 const apiClient = axios.create({
     // baseURL: 'https://8.137.152.40',
-    baseURL:'http://localhost:8080',
+    // baseURL:'http://localhost:8080',
+    baseURL: 'https://for-yaya.work',
+
     timeout: 10000
 })
 
