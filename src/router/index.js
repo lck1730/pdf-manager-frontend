@@ -1,5 +1,5 @@
 // 文件路径: src/router/index.js
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import MainApp from '@/components/MainApp.vue'
 import Login from '@/components/Login.vue'
 import Register from '@/components/Register.vue'
@@ -28,7 +28,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory('/pdf-manager-frontend/'),
+  history: createWebHashHistory(),
   routes
 })
 
